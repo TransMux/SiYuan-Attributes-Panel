@@ -20,6 +20,10 @@ import SettingPannel from "@/libs/setting-panel.svelte";
 
 import { SettingUtils } from "./libs/setting-utils";
 
+// Vue
+import { createApp } from 'vue'
+import App from './App.vue'
+
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
@@ -243,6 +247,15 @@ export default class PluginSample extends Plugin {
                 console.log("destroy tab:", TAB_TYPE);
             }
         });
+
+        // Init Vue App
+        const app = createApp(App)
+        // create an element under layouts for mounting
+        const el = document.createElement('div')
+        el.id = 'mux-attribute-panel'
+        document.querySelector('#layouts')?.appendChild(el)
+        // mount
+        app.mount('#mux-attribute-panel')
     }
 
     async onunload() {

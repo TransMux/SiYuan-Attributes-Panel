@@ -29,5 +29,10 @@
     "vite": "^4.3.7",
     "vite-plugin-static-copy": "^0.15.0",
     "vite-plugin-zip-pack": "^1.0.5"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^4.4.0",
+    "tdesign-vue-next": "^1.6.5",
+    "vue": "^3.2.36"
   }
 }
