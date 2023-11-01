@@ -1,0 +1,37 @@
+<template>
+    <div class="attribute-row">
+        <t-select v-model="value" :borderless="true" style="width: 200px" placeholder="-请选择-" :showArrow="false"
+            :options="options" />
+        <t-input />
+    </div>
+</template>
+  
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const options = [
+    {
+        label: '已选择的选项',
+        value: '1',
+    },
+    {
+        label: '短的选项二',
+        value: '2',
+    },
+    {
+        label: '很长很长很长的选项三',
+        value: '3',
+    },
+];
+
+const value = ref('1');
+</script>
+
+<style scoped>
+/* make select and input in one row */
+.attribute-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+</style>

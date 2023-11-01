@@ -12,7 +12,7 @@ import AttributePanel from './views/AttributePanel.vue';
 /* Make this vue component floating on the page */
 .Mux-Attribute-Panel {
     position: absolute;
-    bottom: 0;
+    bottom: 100px;
     /* make it center */
     left: 50%;
     transform: translateX(-50%);
@@ -21,5 +21,6 @@ import AttributePanel from './views/AttributePanel.vue';
     background-color: #fff;
     border-left: 1px solid #ebeef5;
     z-index: 999;
+    overflow-y: scroll;
 }
 </style>
