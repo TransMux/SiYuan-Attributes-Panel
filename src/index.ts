@@ -23,6 +23,7 @@ import { SettingUtils } from "./libs/setting-utils";
 // Vue
 import { createApp } from 'vue'
 import App from './App.vue'
+import 'tdesign-vue-next/es/style/index.css';
 
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";

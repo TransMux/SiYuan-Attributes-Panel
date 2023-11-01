@@ -8,6 +8,11 @@ import Vue from '@vitejs/plugin-vue'
 import zipPack from "vite-plugin-zip-pack";
 import fg from 'fast-glob';
 
+// vue
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import { TDesignResolver } from 'unplugin-vue-components/resolvers';
+
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
 const devDistDir = "./dev"
@@ -26,7 +31,16 @@ export default defineConfig({
     plugins: [
         svelte(),
         Vue(),
-
+        AutoImport({
+            resolvers: [TDesignResolver({
+              library: 'vue-next'
+            })],
+          }),
+          Components({
+            resolvers: [TDesignResolver({
+              library: 'vue-next'
+            })],
+          }),
         viteStaticCopy({
             targets: [
                 {
