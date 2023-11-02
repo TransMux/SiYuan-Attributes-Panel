@@ -5,6 +5,7 @@
         <AttributeRow />
         <AttributeRow />
         <AttributeRow />
+        <AttributeRowAdd />
     </div>
 </template>
 

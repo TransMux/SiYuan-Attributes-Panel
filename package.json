@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
+    "tdesign-icons-vue-next": "^0.2.2",
     "tdesign-vue-next": "^1.6.5",
     "vue": "^3.2.36"
   }

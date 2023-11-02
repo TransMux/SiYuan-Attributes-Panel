@@ -1,13 +1,18 @@
 <template>
     <div class="attribute-row">
-        <t-select v-model="value" :borderless="true" style="width: 200px" placeholder="-请选择-" :showArrow="false"
-            :options="options" />
-        <t-input />
+        <t-select v-model="value" :borderless="true" class="attr-selector" placeholder="-请选择-" :showArrow="false"
+            :options="options">
+            <template #prefixIcon>
+                <icon name="browse" style="margin-right: 4px" />
+            </template>
+        </t-select>
+        <t-input placeholder="" />
     </div>
 </template>
   
 <script setup lang="ts">
 import { ref } from 'vue';
+import { Icon } from 'tdesign-icons-vue-next';
 
 const options = [
     {
@@ -33,5 +38,18 @@ const value = ref('1');
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+}
+
+:deep(.t-input:not(:hover)) {
+    border: white;
+}
+
+:deep(.t-input--focused) {
+    border-color: var(--td-brand-color);
+}
+
+.attr-selector {
+    width: 150px;
+    margin-right: 10px;
 }
 </style>
