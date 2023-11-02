@@ -12,6 +12,7 @@ import fg from 'fast-glob';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { TDesignResolver } from 'unplugin-vue-components/resolvers';
+import vueJsx from '@vitejs/plugin-vue-jsx'
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
@@ -31,6 +32,7 @@ export default defineConfig({
     plugins: [
         svelte(),
         Vue(),
+        vueJsx(),
         AutoImport({
             resolvers: [TDesignResolver({
               library: 'vue-next'

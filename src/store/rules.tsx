@@ -37,7 +37,11 @@ const defaultdisplayRules = {
 const defaultRenderMethods = {
     "文本": (value: string, editable: boolean) => {
         return (
-            <t-input placeholder="" value={value} disabled={!editable} />
+            <t-input
+                v-model={value}
+                disabled={!editable}
+                borderless="true"
+            />
         );
     }
 }

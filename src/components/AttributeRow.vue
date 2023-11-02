@@ -7,12 +7,12 @@
             </template>
         </t-select>
         <!-- This is rendered by displayElement. -->
-        <div ref="displayElement"></div>
+        <component :is="dynamicComponent"></component>
     </div>
 </template>
   
-<script setup lang="ts">
-import { ref } from 'vue';
+<script setup lang="tsx">
+import { computed, ref } from 'vue';
 import { Icon } from 'tdesign-icons-vue-next';
 import { useAttributesStore } from '@/store/attribute';
 import { useRuleStore } from '@/store/rules';
@@ -28,18 +28,25 @@ const props = defineProps({
 });
 
 const displayKey = ref(props.name);
-const displayElement = ref(null);
+const attributeValue = attributeStore.attributes[props.name] || '';
 
-const displayRule = ruleStore.displayRules[props.name];
+const dynamicComponent = ref(
+    <t-input
+        v-model={attributeValue}
+        borderless="true"
+    />
+)
+
+const displayRule = ruleStore.displayRules[displayKey.value];
 if (displayRule) {
-    displayKey.value = displayRule.displayAs;
-    const displayMethod = ruleStore.renderMethods[displayRule.dataType];
-    if(displayMethod){
-        displayElement.value = displayMethod(displayRule);
+    const displayMethod = ruleStore.renderMethods[displayKey.value];
+    console.log('### displayMethod', displayMethod, displayKey.value);
+    if (displayMethod) {
+        dynamicComponent.value = displayMethod(attributeValue.value, displayRule.editable);
     }
+    displayKey.value = displayRule.displayAs;
 }
 
-const attribute = attributeStore.attributes[props.name] || '';
 
 const options = [
     {
