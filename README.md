@@ -1,3 +1,9 @@
+支持持久化存储之前创建的字段
+支持初始化，检索之前创建的字段
+安装页面
+template：别名，，，等等
+管理页面
+挂载到shift上
 
 # SiYuan plugin sample with vite and svelte
 
