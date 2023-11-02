@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 // import { fetchPost } from "siyuan";
 import dayjs from "dayjs";
 import { Input, DatePicker } from "tdesign-vue-next";
+import { CalendarEventIcon, ViewListIcon } from "tdesign-icons-vue-next";
 
 interface displayRule {
   key: string; // 属性名
@@ -10,6 +11,7 @@ interface displayRule {
   editable: boolean; // 是否可编辑
   dataType: string; // 数据类型，控制渲染方法
   order: number; // 顺序
+  icon?: any; // 图标
 }
 
 interface displayRules {
@@ -33,6 +35,7 @@ const defaultdisplayRules = {
     editable: false,
     dataType: "文本",
     order: 0, // 在外面处理
+    icon: <ViewListIcon />,
   },
   scroll: {
     key: "scroll",
@@ -57,6 +60,7 @@ const defaultdisplayRules = {
     editable: false,
     dataType: "日期时间",
     order: 10,
+    icon: <CalendarEventIcon />,
   },
 };
 

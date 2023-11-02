@@ -3,7 +3,7 @@
         <t-select v-model="value" :borderless="true" class="attr-selector" placeholder="-请选择-" :showArrow="false"
             :options="options">
             <template #prefixIcon>
-                <icon name="browse" style="margin-right: 4px" />
+                <component :is="dynamicIcon"></component>
             </template>
         </t-select>
         <!-- This is rendered by displayElement. -->
@@ -12,10 +12,10 @@
 </template>
   
 <script setup lang="tsx">
-import { computed, ref } from 'vue';
-import { Icon } from 'tdesign-icons-vue-next';
+import { ref, shallowRef } from 'vue';
 import { useAttributesStore } from '@/store/attribute';
 import { useRuleStore } from '@/store/rules';
+import { ViewListIcon } from 'tdesign-icons-vue-next';
 
 const attributeStore = useAttributesStore();
 const ruleStore = useRuleStore();
@@ -30,7 +30,11 @@ const props = defineProps({
 const displayKey = ref(props.name);
 const attributeValue = attributeStore.attributes[props.name] || '';
 
-const dynamicComponent = ref(
+const dynamicIcon = shallowRef(
+    <ViewListIcon />
+)
+
+const dynamicComponent = shallowRef(
     <t-input
         v-model={attributeValue}
         borderless="true"
@@ -40,6 +44,7 @@ const dynamicComponent = ref(
 const displayRule = ruleStore.displayRules[displayKey.value];
 if (displayRule) {
     const displayMethod = ruleStore.renderMethods[displayRule.dataType];
+    dynamicIcon.value = displayRule.icon;
     if (displayMethod) {
         dynamicComponent.value = displayMethod(attributeValue, displayRule.editable);
     }
@@ -84,5 +89,9 @@ const value = ref('1');
 .attr-selector {
     width: 150px;
     margin-right: 10px;
+}
+
+:deep(.t-icon) {
+    margin-right: 4px;
 }
 </style>
