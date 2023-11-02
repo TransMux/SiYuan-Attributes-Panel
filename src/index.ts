@@ -22,6 +22,7 @@ import { SettingUtils } from "./libs/setting-utils";
 
 // Vue
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 import 'tdesign-vue-next/es/style/index.css';
 
@@ -251,11 +252,13 @@ export default class PluginSample extends Plugin {
 
         // Init Vue App
         const app = createApp(App)
+        const pinia = createPinia()
         // create an element under layouts for mounting
         const el = document.createElement('div')
         el.id = 'mux-attribute-panel'
         document.querySelector('#layouts')?.appendChild(el)
         // mount
+        app.use(pinia)
         app.mount('#mux-attribute-panel')
     }
 

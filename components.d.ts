@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AttributeRow: typeof import('./src/components/AttributeRow.vue')['default']
     AttributeRowAdd: typeof import('./src/components/AttributeRowAdd.vue')['default']
+    DebugInfo: typeof import('./src/components/DebugInfo.vue')['default']
     TButton: typeof import('tdesign-vue-next')['Button']
     TInput: typeof import('tdesign-vue-next')['Input']
     TSelect: typeof import('tdesign-vue-next')['Select']
