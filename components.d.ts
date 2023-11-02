@@ -11,6 +11,7 @@ declare module 'vue' {
     AttributeRowAdd: typeof import('./src/components/AttributeRowAdd.vue')['default']
     DebugInfo: typeof import('./src/components/DebugInfo.vue')['default']
     TButton: typeof import('tdesign-vue-next')['Button']
+    TCard: typeof import('tdesign-vue-next')['Card']
     TInput: typeof import('tdesign-vue-next')['Input']
     TSelect: typeof import('tdesign-vue-next')['Select']
   }
