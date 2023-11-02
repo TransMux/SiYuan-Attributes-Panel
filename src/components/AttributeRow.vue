@@ -39,10 +39,9 @@ const dynamicComponent = ref(
 
 const displayRule = ruleStore.displayRules[displayKey.value];
 if (displayRule) {
-    const displayMethod = ruleStore.renderMethods[displayKey.value];
-    console.log('### displayMethod', displayMethod, displayKey.value);
+    const displayMethod = ruleStore.renderMethods[displayRule.dataType];
     if (displayMethod) {
-        dynamicComponent.value = displayMethod(attributeValue.value, displayRule.editable);
+        dynamicComponent.value = displayMethod(attributeValue, displayRule.editable);
     }
     displayKey.value = displayRule.displayAs;
 }

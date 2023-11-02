@@ -17,7 +17,7 @@ import AttributePanel from './views/AttributePanel.vue';
     left: 50%;
     transform: translateX(-50%);
     width: 800px;
-    height: 100px;
+    height: 500px;
     background-color: #fff;
     border-left: 1px solid #ebeef5;
     z-index: 999;
