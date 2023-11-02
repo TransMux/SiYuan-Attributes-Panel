@@ -15,6 +15,10 @@
                     </div>
                 </t-option>
 
+                <template #empty>
+                    没有更多预设啦！<br> 输入以创建新值！
+                </template>
+
                 <template #prefixIcon>
                     <component :is="dynamicIcon"></component>
                 </template>
@@ -26,7 +30,7 @@
 </template>
   
 <script setup lang="tsx">
-import { ref, shallowRef } from 'vue';
+import { computed, ref, shallowRef } from 'vue';
 import { useAttributesStore } from '@/store/attribute';
 import { useRuleStore } from '@/store/rules';
 import { AddIcon, ChevronDownIcon } from 'tdesign-icons-vue-next';
@@ -35,7 +39,12 @@ import { MessagePlugin } from 'tdesign-vue-next';
 const attributeStore = useAttributesStore();
 const ruleStore = useRuleStore();
 
-const options = ruleStore.createOptions
+const avaliable = ruleStore.createOptions
+const existingRows = computed(() => Object.keys(attributeStore.attributes))
+const options = computed(() => {
+    return avaliable.filter(item => !existingRows.value.includes(item.key))
+})
+console.log("### options", attributeStore.ordered)
 
 const attributeKey = ref("");
 const attributeValue = ref('');

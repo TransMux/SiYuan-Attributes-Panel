@@ -5,7 +5,7 @@ import { useRuleStore } from '@/store/rules';
 export const useAttributesStore = defineStore('attributes', {
     state: () => ({
         inspectBlockId: "20231101144112-klqcrrt",
-        attributes: [],
+        attributes: {},
     }),
     getters: {
         ordered() {
