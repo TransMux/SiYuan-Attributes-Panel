@@ -1,11 +1,9 @@
 <template>
     <div class="attribute-panel">
         <DebugInfo />
-        <AttributeRow />
-        <AttributeRow />
-        <AttributeRow />
-        <AttributeRow />
-        <AttributeRow />
+        <template v-for="attribute in Object.keys(attributeStore.attributes)">
+            <AttributeRow :name="attribute" />
+        </template>
         <AttributeRowAdd />
     </div>
 </template>

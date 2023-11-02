@@ -6,17 +6,29 @@
                 <icon name="browse" style="margin-right: 4px" />
             </template>
         </t-select>
-        <t-input placeholder="" />
+        <t-input placeholder="" v-model="attribute" />
     </div>
 </template>
   
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Icon } from 'tdesign-icons-vue-next';
+import { useAttributesStore } from '@/store/attribute';
+
+const attributeStore = useAttributesStore();
+
+const props = defineProps({
+    name: {
+        type: String,
+        required: true,
+    },
+});
+
+const attribute = attributeStore.attributes[props.name] || '';
 
 const options = [
     {
-        label: '已选择的选项',
+        label: props.name,
         value: '1',
     },
     {
