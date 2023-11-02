@@ -6,7 +6,8 @@
                 <icon name="browse" style="margin-right: 4px" />
             </template>
         </t-select>
-        <t-input placeholder="" v-model="attribute" />
+        <!-- This is rendered by displayElement. -->
+        <div ref="displayElement"></div>
     </div>
 </template>
   
@@ -14,8 +15,10 @@
 import { ref } from 'vue';
 import { Icon } from 'tdesign-icons-vue-next';
 import { useAttributesStore } from '@/store/attribute';
+import { useRuleStore } from '@/store/rules';
 
 const attributeStore = useAttributesStore();
+const ruleStore = useRuleStore();
 
 const props = defineProps({
     name: {
@@ -24,11 +27,23 @@ const props = defineProps({
     },
 });
 
+const displayKey = ref(props.name);
+const displayElement = ref(null);
+
+const displayRule = ruleStore.displayRules[props.name];
+if (displayRule) {
+    displayKey.value = displayRule.displayAs;
+    const displayMethod = ruleStore.renderMethods[displayRule.dataType];
+    if(displayMethod){
+        displayElement.value = displayMethod(displayRule);
+    }
+}
+
 const attribute = attributeStore.attributes[props.name] || '';
 
 const options = [
     {
-        label: props.name,
+        label: displayKey.value,
         value: '1',
     },
     {
