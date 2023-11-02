@@ -7,7 +7,7 @@
 
         <template v-else>
             <t-select v-model="attributeKey" :borderless="true" class="attr-selector" placeholder="-请选择-" :showArrow="false"
-                filterable :readonly="!creating" @change="handleSelect">
+                filterable :readonly="!creating" @change="handleSelect" creatable @create="handleCreate">
                 <t-option v-for="item in options" :key="item.key" :value="item.key" :label="item.displayAs">
                     <div class="create-option">
                         <component :is="item.icon"></component>
@@ -16,7 +16,7 @@
                 </t-option>
 
                 <template #empty>
-                    没有更多预设啦！<br> 输入以创建新值！
+                    <div class="t-select__empty">没有更多预设啦<br> 输入以创建新值！</div>
                 </template>
 
                 <template #prefixIcon>
@@ -33,7 +33,7 @@
 import { computed, ref, shallowRef } from 'vue';
 import { useAttributesStore } from '@/store/attribute';
 import { useRuleStore } from '@/store/rules';
-import { AddIcon, ChevronDownIcon } from 'tdesign-icons-vue-next';
+import { AddIcon, ChevronDownIcon, ViewListIcon } from 'tdesign-icons-vue-next';
 import { MessagePlugin } from 'tdesign-vue-next';
 
 const attributeStore = useAttributesStore();
@@ -85,6 +85,18 @@ function handleSelect() {
     } else {
         console.log("### ??? 怎么没有")
     }
+}
+
+function handleCreate(key: string) {
+    // 目前只支持创建英文字段，中文字段不支持，后面跟类型一起支持？还是说，，直接转成拼音算了，不然还要多一步太麻烦了
+    attributeKey.value = key
+    dynamicIcon.value = <ViewListIcon />;
+    dynamicComponent.value = <t-input
+        autowidth
+        borderless="true"
+        onEnter={submit}
+    />
+    selected.value = true
 }
 
 const dynamicComponent = shallowRef(
