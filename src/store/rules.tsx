@@ -78,7 +78,7 @@ const defaultdisplayRules = {
 };
 
 const defaultRenderMethods = {
-  块ID跳转: (value: string, _editable: boolean) => {
+  块ID跳转: (value: string, _editable: boolean, _submit: any) => {
     const url = `siyuan://blocks/${value}`;
     return (
       <Link theme="primary" hover="color" href={url}>
@@ -86,10 +86,18 @@ const defaultRenderMethods = {
       </Link>
     );
   },
-  文本: (value: string, editable: boolean) => {
-    return <Input v-model={value} disabled={!editable} borderless autoWidth={value !== ""} />;
+  文本: (value: string, editable: boolean, submit: any) => {
+    return (
+      <Input
+        defaultValue={value}
+        disabled={!editable}
+        borderless
+        autoWidth={value !== ""}
+        onEnter={submit}
+      />
+    );
   },
-  日期时间: (value: string, editable: boolean) => {
+  日期时间: (value: string, editable: boolean, submit: any) => {
     // convert 20231102190552 to Date
     if (value.length === 14) {
       value = dayjs(value, "YYYYMMDDHHmmss").format("YYYY-MM-DD HH:mm:ss");
@@ -99,7 +107,7 @@ const defaultRenderMethods = {
 
     return (
       <DatePicker
-        v-model={value}
+        defaultValue={value}
         enable-time-picker
         disabled={!editable}
         clearable

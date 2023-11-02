@@ -16,6 +16,7 @@ import { ref, shallowRef } from 'vue';
 import { useAttributesStore } from '@/store/attribute';
 import { useRuleStore } from '@/store/rules';
 import { ViewListIcon } from 'tdesign-icons-vue-next';
+import { MessagePlugin } from 'tdesign-vue-next';
 
 const attributeStore = useAttributesStore();
 const ruleStore = useRuleStore();
@@ -29,6 +30,14 @@ const props = defineProps({
 
 const displayKey = ref(props.name);
 const attributeValue = attributeStore.attributes[props.name] || '';
+
+function submit(text, callback?: any) {
+    attributeStore.setAttribute(props.name, text, () => {
+        // TODO: 这里没做错误处理，万一没成功呢？
+        if (callback && typeof callback === "function") callback()
+        MessagePlugin.success(`设置 ${displayKey.value} 成功`)
+    })
+}
 
 const dynamicIcon = shallowRef(
     <ViewListIcon />
@@ -46,7 +55,7 @@ if (displayRule) {
     const displayMethod = ruleStore.renderMethods[displayRule.dataType];
     dynamicIcon.value = displayRule.icon;
     if (displayMethod) {
-        dynamicComponent.value = displayMethod(attributeValue, displayRule.editable);
+        dynamicComponent.value = displayMethod(attributeValue, displayRule.editable, submit);
     }
     displayKey.value = displayRule.displayAs;
 }

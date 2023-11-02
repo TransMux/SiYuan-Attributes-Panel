@@ -45,6 +45,24 @@ export const useAttributesStore = defineStore('attributes', {
         inspectBlock(blockId: string) {
             this.inspectBlockId = blockId;
             this.fetchAttributes();
+        },
+        setAttribute(
+            attribute: string,
+            value: string,
+            callback?: any
+        ) {
+            fetchPost(
+                "/api/attr/setBlockAttrs",
+                {
+                    id: this.inspectBlockId,
+                    attrs: {
+                        [attribute]: value,
+                    },
+                },
+                callback
+            );
+            // update
+            this.attributes[attribute] = value;
         }
     },
 })

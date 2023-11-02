@@ -30,6 +30,7 @@ import { ref, shallowRef } from 'vue';
 import { useAttributesStore } from '@/store/attribute';
 import { useRuleStore } from '@/store/rules';
 import { AddIcon, ChevronDownIcon } from 'tdesign-icons-vue-next';
+import { MessagePlugin } from 'tdesign-vue-next';
 
 const attributeStore = useAttributesStore();
 const ruleStore = useRuleStore();
@@ -43,6 +44,25 @@ const dynamicIcon = shallowRef(
     <ChevronDownIcon />
 )
 
+function submit(text, callback?: any) {
+    attributeStore.setAttribute(attributeKey.value, text, () => {
+        // TODO: 这里没做错误处理，万一没成功呢？
+        if (callback && typeof callback === "function") callback()
+        MessagePlugin.success(`添加成功`)
+        // reset all states
+        attributeKey.value = "";
+        attributeValue.value = "";
+        dynamicIcon.value = <ChevronDownIcon />
+        dynamicComponent.value = <t-input
+            v-model={attributeValue.value}
+            autowidth
+            borderless="true"
+        />
+        selected.value = false
+        creating.value = false
+    })
+}
+
 const selected = ref(false)
 function handleSelect() {
     const displayRule = ruleStore.displayRules[attributeKey.value];
@@ -50,9 +70,8 @@ function handleSelect() {
         const displayMethod = ruleStore.renderMethods[displayRule.dataType];
         dynamicIcon.value = displayRule.icon;
         if (displayMethod) {
-            dynamicComponent.value = displayMethod("", true);
+            dynamicComponent.value = displayMethod("", true, submit);
         }
-        attributeKey.value = displayRule.displayAs;
         selected.value = true
     } else {
         console.log("### ??? 怎么没有")
@@ -66,16 +85,6 @@ const dynamicComponent = shallowRef(
         borderless="true"
     />
 )
-
-// const displayRule = ruleStore.displayRules[attributeKey.value];
-// if (displayRule) {
-//     const displayMethod = ruleStore.renderMethods[displayRule.dataType];
-//     dynamicIcon.value = displayRule.icon;
-//     if (displayMethod) {
-//         dynamicComponent.value = displayMethod(attributeValue, displayRule.editable);
-//     }
-//     attributeKey.value = displayRule.displayAs;
-// }
 
 const creating = ref(false)
 </script>
