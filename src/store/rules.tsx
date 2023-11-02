@@ -2,7 +2,11 @@ import { defineStore } from "pinia";
 // import { fetchPost } from "siyuan";
 import dayjs from "dayjs";
 import { Input, DatePicker, Link } from "tdesign-vue-next";
-import { CalendarEventIcon, LinkIcon } from "tdesign-icons-vue-next";
+import {
+  CalendarEventIcon,
+  LinkIcon,
+  ViewListIcon,
+} from "tdesign-icons-vue-next";
 
 interface displayRule {
   key: string; // 属性名
@@ -14,7 +18,7 @@ interface displayRule {
   icon?: any; // 图标
 }
 
-interface displayRules {
+interface displayRulesType {
   [key: string]: displayRule;
 }
 
@@ -62,10 +66,19 @@ const defaultdisplayRules = {
     order: 10,
     icon: <CalendarEventIcon />,
   },
+  source: {
+    key: "source",
+    display: true,
+    displayAs: "源",
+    editable: true,
+    dataType: "文本",
+    order: 20,
+    icon: <ViewListIcon />,
+  },
 };
 
 const defaultRenderMethods = {
-  块ID跳转: (value: string, editable: boolean) => {
+  块ID跳转: (value: string, _editable: boolean) => {
     const url = `siyuan://blocks/${value}`;
     return (
       <Link theme="primary" hover="color" href={url}>
@@ -74,15 +87,19 @@ const defaultRenderMethods = {
     );
   },
   文本: (value: string, editable: boolean) => {
-    return <Input v-model={value} disabled={!editable} borderless autoWidth />;
+    return <Input v-model={value} disabled={!editable} borderless autoWidth={value !== ""} />;
   },
   日期时间: (value: string, editable: boolean) => {
     // convert 20231102190552 to Date
-    const date = dayjs(value, "YYYYMMDDHHmmss").toDate();
+    if (value.length === 14) {
+      value = dayjs(value, "YYYYMMDDHHmmss").format("YYYY-MM-DD HH:mm:ss");
+    } else if (value === "") {
+      value = dayjs().format("YYYY-MM-DD HH:mm:ss");
+    }
 
     return (
       <DatePicker
-        v-model={date}
+        v-model={value}
         enable-time-picker
         disabled={!editable}
         clearable
@@ -96,12 +113,20 @@ const defaultRenderMethods = {
 export const useRuleStore = defineStore("rules", {
   state: () => ({
     // 控制数据可见性，可编辑性, key: displayRule
-    displayRules: { ...defaultdisplayRules } as displayRules,
+    displayRules: { ...defaultdisplayRules } as displayRulesType,
     // 用户自定义模板，用于快速填充
     userTemplates: {} as UserTemplates,
     // 渲染方法
     renderMethods: { ...defaultRenderMethods } as any,
   }),
-  getters: {},
+  getters: {
+    createOptions(): Array<displayRule> {
+      return Object.values(this.displayRules).flatMap((rule: displayRule) => {
+        if (!rule.display || !rule.editable) return [];
+
+        return rule;
+      });
+    },
+  },
   actions: {},
 });

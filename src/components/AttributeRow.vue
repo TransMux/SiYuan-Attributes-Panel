@@ -1,7 +1,7 @@
 <template>
     <div class="attribute-row">
         <t-select v-model="value" :borderless="true" class="attr-selector" placeholder="-请选择-" :showArrow="false"
-            :options="options" filterable :readonly="!creating">
+            :options="options" readonly>
             <template #prefixIcon>
                 <component :is="dynamicIcon"></component>
             </template>
@@ -51,21 +51,11 @@ if (displayRule) {
     displayKey.value = displayRule.displayAs;
 }
 
-const creating = ref(false)
-
 
 const options = [
     {
         label: displayKey.value,
         value: '1',
-    },
-    {
-        label: '短的选项二',
-        value: '2',
-    },
-    {
-        label: '很长很长很长的选项三',
-        value: '3',
     },
 ];
 

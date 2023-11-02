@@ -32,7 +32,7 @@ const height = computed(() => {
     width: 500px;
     border-left: 1px solid #ebeef5;
     z-index: 999;
-    overflow-y: scroll;
+    overflow-y: hidden;
 
     padding: 18px 18px;
     background-color: var(--b3-toolbar-background);
