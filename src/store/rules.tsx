@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 // import { fetchPost } from "siyuan";
 import dayjs from "dayjs";
-import { Input, DatePicker } from "tdesign-vue-next";
-import { CalendarEventIcon, ViewListIcon } from "tdesign-icons-vue-next";
+import { Input, DatePicker, Link } from "tdesign-vue-next";
+import { CalendarEventIcon, LinkIcon } from "tdesign-icons-vue-next";
 
 interface displayRule {
   key: string; // 属性名
@@ -33,9 +33,9 @@ const defaultdisplayRules = {
     display: true, // 在外面处理
     displayAs: "块 ID",
     editable: false,
-    dataType: "文本",
+    dataType: "块ID跳转",
     order: 0, // 在外面处理
-    icon: <ViewListIcon />,
+    icon: <LinkIcon />,
   },
   scroll: {
     key: "scroll",
@@ -65,6 +65,14 @@ const defaultdisplayRules = {
 };
 
 const defaultRenderMethods = {
+  块ID跳转: (value: string, editable: boolean) => {
+    const url = `siyuan://blocks/${value}`;
+    return (
+      <Link theme="primary" hover="color" href={url}>
+        {value}
+      </Link>
+    );
+  },
   文本: (value: string, editable: boolean) => {
     return <Input v-model={value} disabled={!editable} borderless autoWidth />;
   },
