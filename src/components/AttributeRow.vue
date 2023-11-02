@@ -1,7 +1,7 @@
 <template>
     <div class="attribute-row">
         <t-select v-model="value" :borderless="true" class="attr-selector" placeholder="-请选择-" :showArrow="false"
-            :options="options">
+            :options="options" filterable :readonly="!creating">
             <template #prefixIcon>
                 <component :is="dynamicIcon"></component>
             </template>
@@ -50,6 +50,8 @@ if (displayRule) {
     }
     displayKey.value = displayRule.displayAs;
 }
+
+const creating = ref(false)
 
 
 const options = [

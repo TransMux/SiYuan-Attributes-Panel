@@ -17,5 +17,9 @@ export const useAttributesStore = defineStore('attributes', {
                 this.attributes = res.data;
             });
         },
+        inspectBlock(blockId: string) {
+            this.inspectBlockId = blockId;
+            this.fetchAttributes();
+        }
     },
 })

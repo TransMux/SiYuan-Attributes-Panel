@@ -66,7 +66,7 @@ const defaultdisplayRules = {
 
 const defaultRenderMethods = {
   文本: (value: string, editable: boolean) => {
-    return <Input v-model={value} disabled={!editable} borderless="true" />;
+    return <Input v-model={value} disabled={!editable} borderless autoWidth />;
   },
   日期时间: (value: string, editable: boolean) => {
     // convert 20231102190552 to Date
