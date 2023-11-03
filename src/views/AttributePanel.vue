@@ -2,7 +2,7 @@
     <div class="attribute-panel">
         <t-card :bordered="false">
             <!-- <DebugInfo /> -->
-            <template v-for="attribute in Object.keys(attributeStore.ordered)">
+            <template v-for="attribute in Object.keys(monitor)" :key="attribute">
                 <AttributeRow :name="attribute" />
             </template>
             <AttributeRowAdd />
@@ -13,15 +13,18 @@
 <script setup lang="ts">
 import AttributeRow from '@/components/AttributeRow.vue';
 import { useAttributesStore } from '@/store/attribute';
-import { computed, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 // 通过一个块id，渲染对应的属性面板
 
 const attributeStore = useAttributesStore();
+const monitor = ref(attributeStore.ordered);
 
-
-onMounted(() => {
-    attributeStore.fetchAttributes();
-});
+watch(
+    () => attributeStore.attributes,
+    () => {
+        console.log('attributes changed', attributeStore.ordered);
+        monitor.value = attributeStore.ordered;
+    }, { deep: true });
 </script>
 
 <style scoped>
