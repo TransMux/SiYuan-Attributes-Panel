@@ -28,12 +28,21 @@ function handleProtyleOpen({ detail }) {
     }
 }
 
+function handleProtyleSwitch({ detail }) {
+    const openedProtyle = detail.protyle
+    if (panelVisible.value) {
+        attributeStore.inspectBlock(openedProtyle.block.id);
+    }
+}
+
 onMounted(() => {
     attributeStore.fetchAttributes();
     window.addEventListener('keydown', handleKeyDownEvent);
     const eventBus = inject("$EventBus");
     // @ts-ignore
     eventBus.on("loaded-protyle-static", handleProtyleOpen);
+    // @ts-ignore
+    eventBus.on("switch-protyle", handleProtyleSwitch)
 });
 
 // detect shift double click
