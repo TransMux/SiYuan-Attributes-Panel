@@ -1,12 +1,13 @@
 import { defineStore } from "pinia";
 // import { fetchPost } from "siyuan";
 import dayjs from "dayjs";
-import { Input, DatePicker, Link, Switch } from "tdesign-vue-next";
+import { Input, DatePicker, Link, Switch, TagInput } from "tdesign-vue-next";
 import {
   CalendarEventIcon,
   LinkIcon,
   ViewListIcon,
   ComponentSwitchIcon,
+  ViewAgendaIcon,
 } from "tdesign-icons-vue-next";
 
 interface displayRule {
@@ -72,9 +73,9 @@ const defaultdisplayRules = {
     display: true,
     displayAs: "别名",
     editable: true,
-    dataType: "文本",
+    dataType: "标签输入框",
     order: 0,
-    icon: <ViewListIcon />,
+    icon: <ViewAgendaIcon />,
   },
   type: {
     key: "type",
@@ -146,6 +147,7 @@ const defaultRenderMethods = {
         borderless
         autoWidth={value !== ""}
         onEnter={submit}
+        placeholder=""
       />
     );
   },
@@ -177,6 +179,23 @@ const defaultRenderMethods = {
         defaultValue={value === "1"}
         disabled={!editable}
         onChange={customSubmit}
+      />
+    );
+  },
+  标签输入框: (value: string, editable: boolean, submit: any) => {
+    function customSubmit(value: Array<string>) {
+      submit(value.join(","));
+    }
+
+    return (
+      <TagInput
+        defaultValue={value ? value.split(",") : []}
+        disabled={!editable}
+        borderless
+        autoWidth={value && value !== ""}
+        onBlur={customSubmit}
+        placeholder=""
+        excessTagsDisplayType="scroll"
       />
     );
   },
