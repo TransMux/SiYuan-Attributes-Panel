@@ -1,7 +1,9 @@
 <template>
-    <div class="Mux-Attribute-Panel move-transition" :style="{...panelState }" >
-        <AttributePanel />
-    </div>
+    <Draggable>
+        <div class="Mux-Attribute-Panel move-transition" :style="{...panelState }" >
+            <AttributePanel />
+        </div>
+    </Draggable>
 </template>
 
 <script setup lang="ts">
@@ -77,8 +79,8 @@ function showPanel() {
         const targetCenterX = targetRect.left + targetRect.width / 2;
         const targetCenterY = targetRect.top + targetRect.height / 2;
 
-        panelState.bottom = window.innerHeight - targetCenterY - panelHeight.value - 100 + 'px';
-        panelState.right = window.innerWidth - targetCenterX - 500 - 80 + 'px';
+        panelState.bottom = window.innerHeight - targetCenterY - panelHeight.value - 50 + 'px';
+        panelState.right = window.innerWidth - targetCenterX - 500 - 50 + 'px';
     };
     window.addEventListener('mousemove', mouseMoveListener);
     // event listener: hide panel when "esc"
@@ -111,6 +113,6 @@ function hidePanel() {
 }
 
 .move-transition {
-    transition: all 0.3s;
+    transition: all 0.05s;
 }
 </style>

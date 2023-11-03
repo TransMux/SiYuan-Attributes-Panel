@@ -25,6 +25,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import 'tdesign-vue-next/es/style/index.css';
+import { DraggablePlugin } from '@braks/revue-draggable';
 
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
@@ -259,6 +260,7 @@ export default class PluginSample extends Plugin {
         document.querySelector('#layouts')?.appendChild(el)
         // mount
         app.use(pinia)
+        app.use(DraggablePlugin);
         app.mount('#mux-attribute-panel')
     }
 
