@@ -24,7 +24,7 @@ interface displayRulesType {
 }
 
 interface UserTemplate {
-  rules: CallableFunction; // 规则
+  display: CallableFunction; // 规则
   attributes: Array<string>; // 包含的属性名
 }
 
@@ -54,6 +54,40 @@ const defaultdisplayRules = {
     key: "title",
     display: false,
     displayAs: "标题",
+    editable: false,
+    dataType: "文本",
+    order: 0,
+  },
+  name: {
+    key: "name",
+    display: true,
+    displayAs: "命名",
+    editable: true,
+    dataType: "文本",
+    order: 0,
+    icon: <ViewListIcon />,
+  },
+  alias: {
+    key: "alias",
+    display: true,
+    displayAs: "别名",
+    editable: true,
+    dataType: "文本",
+    order: 0,
+    icon: <ViewListIcon />,
+  },
+  type: {
+    key: "type",
+    display: false,
+    displayAs: "类型",
+    editable: false,
+    dataType: "文本",
+    order: 0,
+  },
+  icon: {
+    key: "icon",
+    display: false,
+    displayAs: "图标",
     editable: false,
     dataType: "文本",
     order: 0,
@@ -92,7 +126,6 @@ const defaultdisplayRules = {
     editable: false,
     dataType: undefined,
     order: 30,
-    icon: undefined,
   },
 };
 
@@ -149,13 +182,22 @@ const defaultRenderMethods = {
   },
 };
 
+const defaultTemplates = {
+  文档属性: {
+    display: (allAttributes) => {
+      return "title" in allAttributes;
+    },
+    attributes: ["name", "alias"], // 命名，别名
+  },
+};
+
 // 持久化保存
 export const useRuleStore = defineStore("rules", {
   state: () => ({
     // 控制数据可见性，可编辑性, key: displayRule
     displayRules: { ...defaultdisplayRules } as displayRulesType,
     // 用户自定义模板，用于快速填充
-    userTemplates: {} as UserTemplates,
+    userTemplates: { ...defaultTemplates } as UserTemplates,
     // 渲染方法
     renderMethods: { ...defaultRenderMethods } as any,
   }),
