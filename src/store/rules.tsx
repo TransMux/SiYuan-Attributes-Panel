@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 // import { fetchPost } from "siyuan";
 import dayjs from "dayjs";
-import { Input, DatePicker, Link } from "tdesign-vue-next";
+import { Input, DatePicker, Link, Switch } from "tdesign-vue-next";
 import {
   CalendarEventIcon,
   LinkIcon,
   ViewListIcon,
+  ComponentSwitchIcon,
 } from "tdesign-icons-vue-next";
 
 interface displayRule {
@@ -75,6 +76,15 @@ const defaultdisplayRules = {
     order: 20,
     icon: <ViewListIcon />,
   },
+  fold: {
+    key: "fold",
+    display: true,
+    displayAs: "折叠状态",
+    editable: true,
+    dataType: "开关",
+    order: 30,
+    icon: <ComponentSwitchIcon />,
+  },
 };
 
 const defaultRenderMethods = {
@@ -112,6 +122,19 @@ const defaultRenderMethods = {
         disabled={!editable}
         clearable
         borderless="true"
+      />
+    );
+  },
+  开关: (value: string, editable: boolean, submit: any) => {
+    function customSubmit(value: boolean) {
+      submit(value ? "1" : "0");
+    }
+
+    return (
+      <Switch
+        defaultValue={value === "1"}
+        disabled={!editable}
+        onChange={customSubmit}
       />
     );
   },
