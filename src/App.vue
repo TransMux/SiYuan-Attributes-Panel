@@ -1,13 +1,13 @@
 <template>
     <Draggable>
-        <div class="Mux-Attribute-Panel move-transition" :style="{...panelState }" >
+        <div class="Mux-Attribute-Panel move-transition" :style="{ ...panelState }">
             <AttributePanel />
         </div>
     </Draggable>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, inject, onMounted, reactive, ref } from 'vue';
 import AttributePanel from './views/AttributePanel.vue';
 import { useAttributesStore } from '@/store/attribute';
 
@@ -21,9 +21,19 @@ const panelHeight = computed(() => {
     return containerHeight;
 });
 
+function handleProtyleOpen({ detail }) {
+    const openedProtyle = detail.protyle
+    if (panelVisible.value) {
+        attributeStore.inspectBlock(openedProtyle.block.id);
+    }
+}
+
 onMounted(() => {
     attributeStore.fetchAttributes();
     window.addEventListener('keydown', handleKeyDownEvent);
+    const eventBus = inject("$EventBus");
+    // @ts-ignore
+    eventBus.on("loaded-protyle-static", handleProtyleOpen);
 });
 
 // detect shift double click
@@ -102,7 +112,7 @@ function hidePanel() {
 .Mux-Attribute-Panel {
     position: absolute;
     /* make it center */
-    width: 500px;
+    width: 400px;
     border-left: 1px solid #ebeef5;
     z-index: 999;
     overflow-y: hidden;

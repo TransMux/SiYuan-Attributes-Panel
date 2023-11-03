@@ -261,6 +261,7 @@ export default class PluginSample extends Plugin {
         // mount
         app.use(pinia)
         app.use(DraggablePlugin);
+        app.provide("$EventBus", this.eventBus);
         app.mount('#mux-attribute-panel')
     }
 
