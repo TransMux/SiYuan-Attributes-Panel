@@ -85,6 +85,15 @@ const defaultdisplayRules = {
     order: 30,
     icon: <ComponentSwitchIcon />,
   },
+  "custom-avs": {
+    key: "custom-avs",
+    display: false,
+    displayAs: "对应数据库",
+    editable: false,
+    dataType: undefined,
+    order: 30,
+    icon: undefined,
+  },
 };
 
 const defaultRenderMethods = {

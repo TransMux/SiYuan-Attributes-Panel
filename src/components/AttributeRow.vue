@@ -3,12 +3,12 @@
         <t-select v-model="value" :borderless="true" class="attr-selector" placeholder="-请选择-" :showArrow="false"
             :options="options" readonly>
             <template #prefixIcon>
-                <component :is="dynamicIcon"></component>
+                <component :is="dynamicIcon" :key="attributeValue" />
             </template>
         </t-select>
         <!-- This is rendered by displayElement. -->
         <t-loading :loading="submitting" size="small">
-            <component :is="dynamicComponent"></component>
+            <component :is="dynamicComponent" :key="attributeValue" />
         </t-loading>
     </div>
 </template>
@@ -59,6 +59,7 @@ const dynamicComponent = shallowRef(
 const options = ref([]);
 
 watch(attributeValue, (newValue) => {
+    console.log("attributeValue changed", newValue)
     dynamicComponent.value = <t-input
         defaultValue={newValue}
         borderless="true"
@@ -67,9 +68,12 @@ watch(attributeValue, (newValue) => {
     if (displayRule) {
         const displayMethod = ruleStore.renderMethods[displayRule.dataType];
         dynamicIcon.value = displayRule.icon;
+
         if (displayMethod) {
+            console.log("Rerender", displayMethod(attributeValue.value, displayRule.editable, submit))
             dynamicComponent.value = displayMethod(attributeValue.value, displayRule.editable, submit);
         }
+
         options.value = [
             {
                 label: displayRule.displayAs,

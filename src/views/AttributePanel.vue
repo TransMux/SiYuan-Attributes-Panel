@@ -28,7 +28,6 @@ const monitor = ref(attributeStore.ordered);
 watch(
     () => attributeStore.attributes,
     () => {
-        console.log('attributes changed', attributeStore.ordered);
         monitor.value = attributeStore.ordered;
     }, { deep: true });
 </script>
