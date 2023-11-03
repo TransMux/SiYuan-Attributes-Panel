@@ -34,6 +34,7 @@
     "vite-plugin-zip-pack": "^1.0.5"
   },
   "dependencies": {
+    "@braks/revue-draggable": "^0.4.3",
     "@vitejs/plugin-vue": "^4.4.0",
     "dayjs": "^1.11.10",
     "pinia": "^2.1.7",

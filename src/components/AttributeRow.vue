@@ -7,12 +7,14 @@
             </template>
         </t-select>
         <!-- This is rendered by displayElement. -->
-        <component :is="dynamicComponent"></component>
+        <t-loading :loading="submitting" size="small">
+            <component :is="dynamicComponent"></component>
+        </t-loading>
     </div>
 </template>
   
 <script setup lang="tsx">
-import { ref, shallowRef } from 'vue';
+import { computed, ref, shallowRef, watch } from 'vue';
 import { useAttributesStore } from '@/store/attribute';
 import { useRuleStore } from '@/store/rules';
 import { ViewListIcon } from 'tdesign-icons-vue-next';
@@ -28,14 +30,17 @@ const props = defineProps({
     },
 });
 
-const displayKey = ref(props.name);
-const attributeValue = attributeStore.attributes[props.name] || '';
+const displayKey = props.name;
+const attributeValue = computed(() => attributeStore.attributes[props.name] || '')
 
+const submitting = ref(false);
 function submit(text, callback?: any) {
+    submitting.value = true;
     attributeStore.setAttribute(props.name, text, () => {
         // TODO: 这里没做错误处理，万一没成功呢？
         if (callback && typeof callback === "function") callback()
-        MessagePlugin.success(`设置 ${displayKey.value} 成功`)
+        MessagePlugin.success(`设置 ${displayKey} 成功`)
+        submitting.value = false;
     })
 }
 
@@ -45,28 +50,47 @@ const dynamicIcon = shallowRef(
 
 const dynamicComponent = shallowRef(
     <t-input
-        v-model={attributeValue}
+        defaultValue={attributeValue.value}
         borderless="true"
+        onEnter={submit}
     />
 )
 
-const displayRule = ruleStore.displayRules[displayKey.value];
-if (displayRule) {
-    const displayMethod = ruleStore.renderMethods[displayRule.dataType];
-    dynamicIcon.value = displayRule.icon;
-    if (displayMethod) {
-        dynamicComponent.value = displayMethod(attributeValue, displayRule.editable, submit);
+const options = ref([]);
+
+watch(attributeValue, (newValue) => {
+    dynamicComponent.value = <t-input
+        defaultValue={newValue}
+        borderless="true"
+    />
+    const displayRule = ruleStore.displayRules[displayKey];
+    if (displayRule) {
+        const displayMethod = ruleStore.renderMethods[displayRule.dataType];
+        dynamicIcon.value = displayRule.icon;
+        if (displayMethod) {
+            dynamicComponent.value = displayMethod(attributeValue.value, displayRule.editable, submit);
+        }
+        options.value = [
+            {
+                label: displayRule.displayAs,
+                value: '1',
+            }
+        ];
+    } else {
+        options.value = [
+            {
+                label: props.name,
+                value: '1',
+            }
+        ];
+        dynamicComponent.value = <t-input
+            defaultValue={attributeValue.value}
+            borderless="true"
+            autoWidth={attributeValue.value !== ""}
+            onEnter={submit}
+        />
     }
-    displayKey.value = displayRule.displayAs;
-}
-
-
-const options = [
-    {
-        label: displayKey.value,
-        value: '1',
-    },
-];
+}, { immediate: true })
 
 const value = ref('1');
 </script>

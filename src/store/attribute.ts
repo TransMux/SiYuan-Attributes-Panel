@@ -63,6 +63,10 @@ export const useAttributesStore = defineStore('attributes', {
             );
             // update
             this.attributes[attribute] = value;
+        },
+        clearState() {
+            this.inspectBlockId = "";
+            this.attributes = {};
         }
     },
 })

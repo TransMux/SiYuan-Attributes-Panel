@@ -7,7 +7,7 @@
 
         <template v-else>
             <t-select v-model="attributeKey" :borderless="true" class="attr-selector" placeholder="-请选择-" :showArrow="false"
-                filterable :readonly="!creating" @change="handleSelect" creatable @create="handleCreate">
+                filterable :readonly="selected" @change="handleSelect" creatable @create="handleCreate">
                 <t-option v-for="item in options" :key="item.key" :value="item.key" :label="item.displayAs">
                     <div class="create-option">
                         <component :is="item.icon"></component>
@@ -63,7 +63,7 @@ function submit(text, callback?: any) {
         attributeValue.value = "";
         dynamicIcon.value = <ChevronDownIcon />
         dynamicComponent.value = <t-input
-            v-model={attributeValue.value}
+            defaultValue={attributeValue.value}
             autowidth
             borderless="true"
         />
@@ -101,7 +101,7 @@ function handleCreate(key: string) {
 
 const dynamicComponent = shallowRef(
     <t-input
-        v-model={attributeValue.value}
+        defaultValue={attributeValue.value}
         autowidth
         borderless="true"
     />
