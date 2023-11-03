@@ -7,7 +7,9 @@
             </template>
         </t-select>
         <!-- This is rendered by displayElement. -->
-        <component :is="dynamicComponent"></component>
+        <t-loading :loading="submitting" size="small">
+            <component :is="dynamicComponent"></component>
+        </t-loading>
     </div>
 </template>
   
@@ -31,11 +33,14 @@ const props = defineProps({
 const displayKey = props.name;
 const attributeValue = computed(() => attributeStore.attributes[props.name] || '')
 
+const submitting = ref(false);
 function submit(text, callback?: any) {
+    submitting.value = true;
     attributeStore.setAttribute(props.name, text, () => {
         // TODO: 这里没做错误处理，万一没成功呢？
         if (callback && typeof callback === "function") callback()
         MessagePlugin.success(`设置 ${displayKey} 成功`)
+        submitting.value = false;
     })
 }
 
