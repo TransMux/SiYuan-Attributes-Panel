@@ -32,8 +32,8 @@ const panelVisible = ref(false);
 const panelState = reactive({
     visibility: 'hidden',
     opacity: 0,
-    bottom: "0px",
-    right: "0px",
+    top: "100px",
+    left: "100px",
 });
 
 function handleKeyDownEvent(e: KeyboardEvent) {
@@ -75,12 +75,12 @@ function showPanel() {
         attributeStore.inspectBlock(nodeId);
 
         // get target element center
-        const targetRect = button.getBoundingClientRect();
-        const targetCenterX = targetRect.left + targetRect.width / 2;
-        const targetCenterY = targetRect.top + targetRect.height / 2;
+        // const targetRect = button.getBoundingClientRect();
+        // const targetCenterX = targetRect.left + targetRect.width / 2;
+        // const targetCenterY = targetRect.top + targetRect.height / 2;
 
-        panelState.bottom = window.innerHeight - targetCenterY - panelHeight.value - 50 + 'px';
-        panelState.right = window.innerWidth - targetCenterX - 500 - 50 + 'px';
+        // panelState.bottom = window.innerHeight - targetCenterY - panelHeight.value - 50 + 'px';
+        // panelState.right = window.innerWidth - targetCenterX - 500 - 50 + 'px';
     };
     window.addEventListener('mousemove', mouseMoveListener);
     // event listener: hide panel when "esc"
@@ -110,6 +110,9 @@ function hidePanel() {
     padding: 18px 18px;
     background-color: var(--b3-toolbar-background);
     border-radius: var(--td-radius-medium);
+
+    /* Shadow */
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
 .move-transition {

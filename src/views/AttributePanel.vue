@@ -2,10 +2,16 @@
     <div class="attribute-panel">
         <t-card :bordered="false">
             <!-- <DebugInfo /> -->
-            <template v-for="attribute in Object.keys(monitor)" :key="attribute">
-                <AttributeRow :name="attribute" />
+            <template v-if="attributeStore.inspectBlockId">
+                <template v-for="attribute in Object.keys(monitor)" :key="attribute">
+                    <AttributeRow :name="attribute" />
+                </template>
+                <AttributeRowAdd />
             </template>
-            <AttributeRowAdd />
+
+            <template v-else>
+                暂无属性
+            </template>
         </t-card>
     </div>
 </template>
