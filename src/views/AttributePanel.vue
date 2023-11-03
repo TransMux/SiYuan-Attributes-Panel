@@ -3,7 +3,7 @@
         <t-card :bordered="false">
             <!-- <DebugInfo /> -->
             <template v-if="attributeStore.inspectBlockId">
-                <template v-for="attribute in Object.keys(monitor)" :key="attribute">
+                <template v-for="attribute in monitor" :key="attribute">
                     <AttributeRow :name="attribute" />
                 </template>
                 <AttributeRowAdd />
@@ -19,16 +19,31 @@
 <script setup lang="ts">
 import AttributeRow from '@/components/AttributeRow.vue';
 import { useAttributesStore } from '@/store/attribute';
+import { useRuleStore } from '@/store/rules';
 import { ref, watch } from 'vue';
 // 通过一个块id，渲染对应的属性面板
 
 const attributeStore = useAttributesStore();
+const ruleStore = useRuleStore();
+
 const monitor = ref(attributeStore.ordered);
 
 watch(
     () => attributeStore.attributes,
     () => {
-        monitor.value = attributeStore.ordered;
+        const result = Object.keys(attributeStore.ordered);
+        // render templates
+        for (const template of Object.values(ruleStore.userTemplates)) {
+            if (!template.display(attributeStore.attributes)) continue;
+
+            // merge template.attributes
+            for (const attribute of template.attributes) {
+                if (!result.includes(attribute)) {
+                    result.push(attribute);
+                }
+            }
+        }
+        monitor.value = result;
     }, { deep: true });
 </script>
 
