@@ -38,7 +38,6 @@ export const useAttributesStore = defineStore('attributes', {
             fetchPost('/api/attr/getBlockAttrs', {
                 id: this.inspectBlockId,
             }, (res: any) => {
-                console.log("###Mux Fetched Attributes for", this.inspectBlockId, res);
                 this.attributes = res.data;
             });
         },

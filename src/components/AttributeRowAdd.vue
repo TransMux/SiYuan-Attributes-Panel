@@ -44,7 +44,6 @@ const existingRows = computed(() => Object.keys(attributeStore.attributes))
 const options = computed(() => {
     return avaliable.filter(item => !existingRows.value.includes(item.key))
 })
-console.log("### options", attributeStore.ordered)
 
 const attributeKey = ref("");
 const attributeValue = ref('');

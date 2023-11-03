@@ -59,7 +59,6 @@ const dynamicComponent = shallowRef(
 const options = ref([]);
 
 watch(attributeValue, (newValue) => {
-    console.log("attributeValue changed", newValue)
     dynamicComponent.value = <t-input
         defaultValue={newValue}
         borderless="true"
@@ -70,7 +69,6 @@ watch(attributeValue, (newValue) => {
         dynamicIcon.value = displayRule.icon;
 
         if (displayMethod) {
-            console.log("Rerender", displayMethod(attributeValue.value, displayRule.editable, submit))
             dynamicComponent.value = displayMethod(attributeValue.value, displayRule.editable, submit);
         }
 
