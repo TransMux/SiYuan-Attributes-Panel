@@ -71,7 +71,10 @@ function handleKeyDownEvent(e: KeyboardEvent) {
     }
 }
 
-let mouseMoveListener = undefined;
+/*
+新交互：
+shift + hover显示，离开一定距离后隐藏
+*/
 
 function showPanel() {
     panelVisible.value = true;
@@ -79,35 +82,11 @@ function showPanel() {
         panelState.visibility = 'visible';
         panelState.opacity = 1;
     }, 0);
-    // event listener: move panel to mouse position
-    mouseMoveListener = (e: MouseEvent) => {
-        // move only points element has is <span draggable="true"></span>
-        if (e.target.tagName !== 'SPAN' || e.target.getAttribute('draggable') !== 'true') {
-            return;
-        }
-        // get parent element button's data-node-id
-        const button = e.target.parentElement;
-        const nodeId = button.getAttribute('data-node-id');
-        if (!nodeId || nodeId === attributeStore.inspectBlockId) {
-            return;
-        }
-        attributeStore.inspectBlock(nodeId);
-
-        // get target element center
-        // const targetRect = button.getBoundingClientRect();
-        // const targetCenterX = targetRect.left + targetRect.width / 2;
-        // const targetCenterY = targetRect.top + targetRect.height / 2;
-
-        // panelState.bottom = window.innerHeight - targetCenterY - panelHeight.value - 50 + 'px';
-        // panelState.right = window.innerWidth - targetCenterX - 500 - 50 + 'px';
-    };
-    window.addEventListener('mousemove', mouseMoveListener);
     // event listener: hide panel when "esc"
     window.addEventListener('keydown', handleKeyDownEvent);
 }
 
 function hidePanel() {
-    window.removeEventListener('mousemove', mouseMoveListener);
     panelState.visibility = 'hidden';
     panelState.opacity = 0;
     setTimeout(() => {
