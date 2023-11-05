@@ -71,9 +71,11 @@ function handleKeyDownEvent(e: KeyboardEvent) {
     }
 }
 
+let mouseMoveListener = undefined;
+
 /*
 新交互：
-shift + hover显示，离开一定距离后隐藏
+shift + hover 块 切换，不需要再选择块标签
 */
 
 function showPanel() {
@@ -82,11 +84,43 @@ function showPanel() {
         panelState.visibility = 'visible';
         panelState.opacity = 1;
     }, 0);
+    // event listener: move panel to mouse position
+    mouseMoveListener = (e: MouseEvent) => {
+        // if not shift
+        if (!e.shiftKey) {
+            return;
+        }
+        
+        if (e.target.tagName === 'SPAN') {
+            return;
+        }
+        
+        const closestDiv = e.target.closest('[data-node-id]');
+        if (!closestDiv) {
+            return null;
+        }
+
+        const nodeId = closestDiv.getAttribute('data-node-id');
+
+        // add protyle-wysiwyg--select
+        closestDiv.classList.add('protyle-wysiwyg--select');
+        setTimeout(() => {
+            closestDiv.classList.remove('protyle-wysiwyg--select');
+        }, 200);
+
+        if (!nodeId || nodeId === attributeStore.inspectBlockId) {
+            return;
+        }
+
+        attributeStore.inspectBlock(nodeId);
+    };
+    window.addEventListener('mousemove', mouseMoveListener);
     // event listener: hide panel when "esc"
     window.addEventListener('keydown', handleKeyDownEvent);
 }
 
 function hidePanel() {
+    window.removeEventListener('mousemove', mouseMoveListener);
     panelState.visibility = 'hidden';
     panelState.opacity = 0;
     setTimeout(() => {
