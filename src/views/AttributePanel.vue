@@ -3,6 +3,9 @@
         <t-card :bordered="false">
             <!-- <DebugInfo /> -->
             <div class="content">
+                {{ attributeStore.docPath }}
+            </div>
+            <div class="content">
                 {{ attributeStore.content }}
             </div>
             <template v-if="attributeStore.inspectBlockId">
@@ -68,6 +71,5 @@ watch(
     font-size: 14px;
     line-height: 20px;
     margin-bottom: 4px;
-    cursor: pointer;
 }
 </style>

@@ -7,6 +7,7 @@ export const useAttributesStore = defineStore('attributes', {
         inspectBlockId: "20231101144112-klqcrrt",
         attributes: {},
         content: "",
+        docPath: "打开一个文档以获取文档信息...", // 当前文档人类可读路径，包括笔记本
     }),
     getters: {
         ordered() {
@@ -40,6 +41,22 @@ export const useAttributesStore = defineStore('attributes', {
                 id: this.inspectBlockId,
             }, (res: any) => {
                 this.attributes = res.data;
+                // doc check
+                if ("title" in this.attributes && "scroll" in this.attributes) {
+                    const startId = JSON.parse(this.attributes.scroll).startId;
+                    if (!startId) {
+                        return;
+                    }
+
+                    // 通过获取第一个块的面包屑来获取文档路径和文档内容
+                    fetchPost('/api/block/getBlockBreadcrumb', {
+                        id: startId
+                    }, (res: any) => {
+                        const breadcrumb = res.data;
+                        this.docPath = breadcrumb[0].name;
+                        this.setContent(breadcrumb[1].name);
+                    });
+                }
             });
         },
         inspectBlock(blockId: string) {
@@ -69,8 +86,8 @@ export const useAttributesStore = defineStore('attributes', {
             this.attributes = {};
         },
         setContent(content: string) {
-            if (content.length > 20) {
-                this.content = content.slice(0, 20) + "...";
+            if (content.length > 30) {
+                this.content = content.slice(0, 30) + "...";
             } else {
                 this.content = content;
             }
