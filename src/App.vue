@@ -106,13 +106,14 @@ function showPanel() {
         closestDiv.classList.add('protyle-wysiwyg--select');
         setTimeout(() => {
             closestDiv.classList.remove('protyle-wysiwyg--select');
-        }, 200);
+        }, 100);
 
         if (!nodeId || nodeId === attributeStore.inspectBlockId) {
             return;
         }
 
         attributeStore.inspectBlock(nodeId);
+        attributeStore.setContent(closestDiv.textContent);
     };
     window.addEventListener('mousemove', mouseMoveListener);
     // event listener: hide panel when "esc"

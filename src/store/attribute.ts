@@ -6,6 +6,7 @@ export const useAttributesStore = defineStore('attributes', {
     state: () => ({
         inspectBlockId: "20231101144112-klqcrrt",
         attributes: {},
+        content: "",
     }),
     getters: {
         ordered() {
@@ -66,6 +67,13 @@ export const useAttributesStore = defineStore('attributes', {
         clearState() {
             this.inspectBlockId = "";
             this.attributes = {};
+        },
+        setContent(content: string) {
+            if (content.length > 20) {
+                this.content = content.slice(0, 20) + "...";
+            } else {
+                this.content = content;
+            }
         }
     },
 })
