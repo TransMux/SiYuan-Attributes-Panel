@@ -56,13 +56,13 @@ watch(
 <style scoped>
 .form-step-container {
     background-color: var(--td-bg-color-container);
-    padding: 24px 24px;
+    padding: 12px 12px;
     border-radius: var(--td-radius-medium);
     height: 100%;
 }
 
 :deep(.t-card__body) {
-    padding: 24px 24px;
+    padding: 12px 12px;
 }
 
 .content {

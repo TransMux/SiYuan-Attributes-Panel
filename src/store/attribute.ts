@@ -55,6 +55,7 @@ export const useAttributesStore = defineStore('attributes', {
                         const breadcrumb = res.data;
                         this.docPath = breadcrumb[0].name;
                         this.setContent(breadcrumb[1].name);
+                        console.log("updated doc path", this.docPath, this.content)
                     });
                 }
             });

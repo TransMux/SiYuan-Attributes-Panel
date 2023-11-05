@@ -102,7 +102,7 @@ const value = ref('1');
 .attribute-row {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 :deep(.t-input:not(:hover)) {
@@ -115,7 +115,7 @@ const value = ref('1');
 
 .attr-selector {
     width: 150px;
-    margin-right: 10px;
+    margin-right: 8px;
 }
 
 :deep(.t-icon) {

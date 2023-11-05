@@ -36,7 +36,6 @@ function handleProtyleSwitch({ detail }) {
 }
 
 onMounted(() => {
-    attributeStore.fetchAttributes();
     window.addEventListener('keydown', handleKeyDownEvent);
     const eventBus = inject("$EventBus");
     // @ts-ignore
@@ -140,7 +139,7 @@ function hidePanel() {
     z-index: 999;
     overflow-y: hidden;
 
-    padding: 18px 18px;
+    padding: 8px 8px;
     background-color: var(--b3-toolbar-background);
     border-radius: var(--td-radius-medium);
 
