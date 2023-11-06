@@ -2,6 +2,12 @@
     <Draggable>
         <div class="Mux-Attribute-Panel move-transition" :style="{ ...panelState }">
             <AttributePanel />
+            <div class="operations">
+                <t-link theme="danger" hover="color" target="_blank" @click="hidePanel">
+                    <jump-icon slot="suffixIcon" />
+                    关闭面板
+                </t-link>
+            </div>
         </div>
     </Draggable>
 </template>
@@ -65,8 +71,6 @@ function handleKeyDownEvent(e: KeyboardEvent) {
             }
             firstShift = undefined;
         }
-    } else if (e.key === 'Escape' && panelVisible.value) {
-        hidePanel();
     }
 }
 
@@ -89,11 +93,11 @@ function showPanel() {
         if (!e.shiftKey) {
             return;
         }
-        
+
         if (e.target.tagName === 'SPAN') {
             return;
         }
-        
+
         const closestDiv = e.target.closest('[data-node-id]');
         if (!closestDiv) {
             return null;
@@ -149,5 +153,11 @@ function hidePanel() {
 
 .move-transition {
     transition: all 0.05s;
+}
+
+.operations {
+    margin-right: 10px;
+    display: flex;
+    justify-content: flex-end;
 }
 </style>
