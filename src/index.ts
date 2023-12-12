@@ -24,6 +24,7 @@ import { SettingUtils } from "./libs/setting-utils";
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
+import SettingPage from './views/SettingPage.vue'
 import 'tdesign-vue-next/es/style/index.css';
 import { DraggablePlugin } from '@braks/revue-draggable';
 
@@ -231,12 +232,16 @@ export default class PluginSample extends Plugin {
         this.settingUtils.load();
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
         let tabDiv = document.createElement("div");
-        new HelloExample({
-            target: tabDiv,
-            props: {
-                app: this.app,
-            }
-        });
+        const pinia = createPinia()
+        const setting = createApp(SettingPage);
+        setting.use(pinia)
+        setting.mount(tabDiv);
+        // new HelloExample({
+        //     target: tabDiv,
+        //     props: {
+        //         app: this.app,
+        //     }
+        // });
         this.customTab = this.addTab({
             type: TAB_TYPE,
             init() {
@@ -253,7 +258,6 @@ export default class PluginSample extends Plugin {
 
         // Init Vue App
         const app = createApp(App)
-        const pinia = createPinia()
         // create an element under layouts for mounting
         const el = document.createElement('div')
         el.id = 'mux-attribute-panel'
@@ -442,7 +446,7 @@ export default class PluginSample extends Plugin {
                 label: "Open Doc Window(open help first)",
                 click: () => {
                     openWindow({
-                        doc: {id: "20200812220555-lj3enxa"}
+                        doc: { id: "20200812220555-lj3enxa" }
                     });
                 }
             });
