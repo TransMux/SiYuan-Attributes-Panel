@@ -256,17 +256,7 @@ export default class PluginSample extends Plugin {
             }
         });
 
-        // Init Vue App
-        const app = createApp(App)
-        // create an element under layouts for mounting
-        const el = document.createElement('div')
-        el.id = 'mux-attribute-panel'
-        document.querySelector('#layouts')?.appendChild(el)
-        // mount
-        app.use(pinia)
-        app.use(DraggablePlugin);
-        app.provide("$EventBus", this.eventBus);
-        app.mount('#mux-attribute-panel')
+        this.eventBus.on("loaded-protyle-static", this.initPagePanel);
     }
 
     async onunload() {
@@ -301,6 +291,40 @@ export default class PluginSample extends Plugin {
         event.detail.resolve({
             textPlain: event.detail.textPlain.trim(),
         });
+    }
+
+    private initPagePanel({ detail }) {
+        const openedProtyle = detail.protyle
+
+        // Step 1: Find the element with the specific data-node-id and class
+        const parentNode = document.querySelector(`div[data-node-id="${openedProtyle.block.id}"].protyle-title`);
+
+        if (parentNode) {
+            // Step 2: Find the child div with class 'protyle-attr'
+            const targetNode = parentNode.querySelector('div.protyle-attr');
+
+            if (targetNode) {
+                // Step 3: Insert a new div element with class 'mux-attribute-panel' after the target node
+                const newDiv = document.createElement('div');
+                newDiv.className = 'mux-attribute-panel';
+                targetNode.after(newDiv);
+
+                // Step 4: Initialize Vue on the new div element
+                const app = createApp(App)
+                const pinia = createPinia()
+                // Mount
+                app.use(pinia); // Replace 'pinia' with your store, if any
+                app.use(DraggablePlugin); // Use the required plugins
+                app.provide("$EventBus", this.eventBus); // Replace 'new Vue()' with your EventBus instance
+                app.provide("$blockId", openedProtyle.block.id); // Replace 'new Vue()' with your EventBus instance
+                app.mount(newDiv);
+            } else {
+                console.error('Target child div not found');
+            }
+        } else {
+            console.error('Parent node not found');
+        }
+
     }
 
     private eventBusLog({ detail }: any) {

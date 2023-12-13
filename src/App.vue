@@ -1,15 +1,5 @@
 <template>
-    <Draggable>
-        <div class="Mux-Attribute-Panel move-transition" :style="{ ...panelState }">
-            <AttributePanel />
-            <div class="operations">
-                <t-link theme="danger" hover="color" target="_blank" @click="hidePanel">
-                    <jump-icon slot="suffixIcon" />
-                    关闭面板
-                </t-link>
-            </div>
-        </div>
-    </Draggable>
+    <AttributePanel />
 </template>
 
 <script setup lang="ts">
@@ -45,9 +35,12 @@ onMounted(() => {
     window.addEventListener('keydown', handleKeyDownEvent);
     const eventBus = inject("$EventBus");
     // @ts-ignore
-    eventBus.on("loaded-protyle-static", handleProtyleOpen);
+    // eventBus.on("loaded-protyle-static", handleProtyleOpen);
     // @ts-ignore
-    eventBus.on("switch-protyle", handleProtyleSwitch)
+    // eventBus.on("switch-protyle", handleProtyleSwitch)
+    const blockId = inject("$blockId");
+    console.log(blockId);
+    attributeStore.inspectBlock(blockId);
 });
 
 // detect shift double click
@@ -135,29 +128,5 @@ function hidePanel() {
 
 <style scoped>
 /* Make this vue component floating on the page */
-.Mux-Attribute-Panel {
-    position: absolute;
-    /* make it center */
-    width: 400px;
-    border-left: 1px solid #ebeef5;
-    z-index: 999;
-    overflow-y: hidden;
 
-    padding: 8px 8px;
-    background-color: var(--b3-toolbar-background);
-    border-radius: var(--td-radius-medium);
-
-    /* Shadow */
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-}
-
-.move-transition {
-    transition: all 0.05s;
-}
-
-.operations {
-    margin-right: 10px;
-    display: flex;
-    justify-content: flex-end;
-}
 </style>
