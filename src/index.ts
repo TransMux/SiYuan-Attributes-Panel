@@ -232,6 +232,8 @@ export default class PluginSample extends Plugin {
         this.settingUtils.load();
         console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
         let tabDiv = document.createElement("div");
+        // set height 100%
+        tabDiv.style.height = "100%";
         const pinia = createPinia()
         const setting = createApp(SettingPage);
         setting.use(pinia)
