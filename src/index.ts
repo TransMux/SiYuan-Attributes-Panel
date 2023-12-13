@@ -257,6 +257,7 @@ export default class PluginSample extends Plugin {
         });
 
         this.eventBus.on("loaded-protyle-static", this.initPagePanel);
+        window.attribute_pinia = pinia
     }
 
     async onunload() {
@@ -311,9 +312,8 @@ export default class PluginSample extends Plugin {
 
                 // Step 4: Initialize Vue on the new div element
                 const app = createApp(App)
-                const pinia = createPinia()
                 // Mount
-                app.use(pinia); // Replace 'pinia' with your store, if any
+                app.use(window.attribute_pinia); // Replace 'pinia' with your store, if any
                 app.use(DraggablePlugin); // Use the required plugins
                 app.provide("$EventBus", this.eventBus); // Replace 'new Vue()' with your EventBus instance
                 app.provide("$blockId", openedProtyle.block.id); // Replace 'new Vue()' with your EventBus instance
