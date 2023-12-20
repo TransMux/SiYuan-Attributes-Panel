@@ -259,7 +259,7 @@ export default class PluginSample extends Plugin {
         });
 
         this.eventBus.on("loaded-protyle-static", this.initPagePanel);
-        window.attribute_pinia = pinia
+        window.muxPluginStore = pinia
     }
 
     async onunload() {
@@ -307,6 +307,9 @@ export default class PluginSample extends Plugin {
             const targetNode = parentNode.querySelector('div.protyle-attr');
 
             if (targetNode) {
+                // if has mux-attribute-panel, return
+                if (document.querySelector('#mux-attribute-panel')) return
+
                 // Step 3: Insert a new div element with class 'mux-attribute-panel' after the target node
                 const newDiv = document.createElement('div');
                 newDiv.className = 'mux-attribute-panel';
@@ -315,7 +318,7 @@ export default class PluginSample extends Plugin {
                 // Step 4: Initialize Vue on the new div element
                 const app = createApp(App)
                 // Mount
-                app.use(window.attribute_pinia); // Replace 'pinia' with your store, if any
+                app.use(window.muxPluginStore); // Replace 'pinia' with your store, if any
                 app.use(DraggablePlugin); // Use the required plugins
                 app.provide("$EventBus", this.eventBus); // Replace 'new Vue()' with your EventBus instance
                 app.provide("$blockId", openedProtyle.block.id); // Replace 'new Vue()' with your EventBus instance
