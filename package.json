@@ -2,13 +2,13 @@
   "name": "mux-plugin-siyuan-attribute-panel",
   "version": "0.2.6",
   "type": "module",
-  "description": "This is a sample plugin based on vite and svelte for Siyuan (https://b3log.org/siyuan)",
+  "description": "思源属性面板",
   "repository": "",
   "homepage": "",
   "author": "",
   "license": "MIT",
   "scripts": {
-    "make-link": "node  --no-warnings ./scripts/make_dev_link.js",
+    "make-link": "node --no-warnings ./scripts/make_dev_link.js",
     "dev": "vite build --watch",
     "build": "vite build"
   },

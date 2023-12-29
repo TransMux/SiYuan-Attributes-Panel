@@ -8,7 +8,7 @@
   "frontends": ["desktop", "desktop-window"],
   "displayName": {
     "default": "SiYuan-Attribute-Panel",
-    "zh_CN": "文档属性视图"
+    "zh_CN": "文档属性面板"
   },
   "description": {
     "default": "Provide a panel to view and edit document attributes",
