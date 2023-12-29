@@ -1,36 +1,27 @@
 {
-  "name": "plugin-sample-vite-svelte",
-  "author": "frostime",
-  "url": "https://github.com/siyuan-note/plugin-sample-vite-svelte",
-  "version": "0.2.6",
-  "minAppVersion": "2.10.12",
-  "backends": [
-    "windows",
-    "linux",
-    "darwin"
-  ],
-  "frontends": [
-    "desktop",
-    "desktop-window"
-  ],
+  "name": "SiYuan-Attribute-Panel",
+  "author": "Mux",
+  "url": "https://github.com/InEase/SiYuan-Attribute-Panel",
+  "version": "0.1.0",
+  "minAppVersion": "2.10.13",
+  "backends": ["windows", "linux", "darwin"],
+  "frontends": ["desktop", "desktop-window"],
   "displayName": {
-    "en_US": "Plugin sample with vite and svelte",
-    "zh_CN": "插件样例 vite + svelte 版"
+    "default": "SiYuan-Attribute-Panel",
+    "zh_CN": "文档属性视图"
   },
   "description": {
-    "en_US": "SiYuan plugin sample with vite and svelte",
-    "zh_CN": "使用 vite 和 svelte 开发的思源插件样例"
+    "default": "Provide a panel to view and edit document attributes",
+    "zh_CN": "提供一个面板查看和编辑文档属性"
   },
   "readme": {
-    "en_US": "README.md",
+    "default": "README.md",
     "zh_CN": "README_zh_CN.md"
   },
   "funding": {
-    "custom": [
-      "https://afdian.net/a/frostime"
-    ]
+    "openCollective": "",
+    "patreon": "",
+    "github": ""
   },
-  "keywords": [
-    "plugin", "sample", "插件样例"
-  ]
+  "keywords": ["sample", "示例"]
 }
