@@ -65,7 +65,7 @@ const defaultdisplayRules = {
     displayAs: "命名",
     editable: true,
     dataType: "文本",
-    order: 0,
+    order: 20,
     icon: <ViewListIcon />,
   },
   alias: {
@@ -74,7 +74,7 @@ const defaultdisplayRules = {
     displayAs: "别名",
     editable: true,
     dataType: "标签输入框",
-    order: 0,
+    order: 30,
     icon: <ViewAgendaIcon />,
   },
   type: {
@@ -102,13 +102,13 @@ const defaultdisplayRules = {
     order: 10,
     icon: <CalendarEventIcon />,
   },
-  source: {
-    key: "source",
+  "custom-source": {
+    key: "custom-source",
     display: true,
     displayAs: "源",
     editable: true,
     dataType: "文本",
-    order: 20,
+    order: 100,
     icon: <ViewListIcon />,
   },
   fold: {
@@ -117,7 +117,7 @@ const defaultdisplayRules = {
     displayAs: "折叠状态",
     editable: true,
     dataType: "开关",
-    order: 30,
+    order: 40,
     icon: <ComponentSwitchIcon />,
   },
   "custom-avs": {

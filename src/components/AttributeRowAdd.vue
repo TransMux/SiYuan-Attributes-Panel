@@ -7,7 +7,7 @@
 
         <template v-else>
             <t-select v-model="attributeKey" :borderless="true" class="attr-selector" placeholder="-请选择-" :showArrow="false"
-                filterable :readonly="selected" @change="handleSelect" creatable @create="handleCreate">
+                filterable @change="handleSelect" creatable @create="handleCreate">
                 <t-option v-for="item in options" :key="item.key" :value="item.key" :label="item.displayAs">
                     <div class="create-option">
                         <component :is="item.icon"></component>
@@ -24,7 +24,7 @@
                 </template>
             </t-select>
             <!-- This is rendered by displayElement. -->
-            <component v-if="selected" :is="dynamicComponent"></component>
+            <component :is="dynamicComponent"></component>
         </template>
     </div>
 </template>
@@ -66,12 +66,10 @@ function submit(text, callback?: any) {
             autowidth
             borderless="true"
         />
-        selected.value = false
         creating.value = false
     })
 }
 
-const selected = ref(false)
 function handleSelect() {
     const displayRule = ruleStore.displayRules[attributeKey.value];
     if (displayRule) {
@@ -80,13 +78,17 @@ function handleSelect() {
         if (displayMethod) {
             dynamicComponent.value = displayMethod("", true, submit);
         }
-        selected.value = true
     } else {
         console.log("### ??? 怎么没有")
     }
 }
 
 function handleCreate(key: string) {
+    // 需要以custom-开头
+    if (!key.startsWith("custom-")) {
+        MessagePlugin.error("自定义属性必须以custom-开头")
+        return
+    }
     // 目前只支持创建英文字段，中文字段不支持，后面跟类型一起支持？还是说，，直接转成拼音算了，不然还要多一步太麻烦了
     attributeKey.value = key
     dynamicIcon.value = <ViewListIcon />;
@@ -95,7 +97,6 @@ function handleCreate(key: string) {
         borderless="true"
         onEnter={submit}
     />
-    selected.value = true
 }
 
 const dynamicComponent = shallowRef(

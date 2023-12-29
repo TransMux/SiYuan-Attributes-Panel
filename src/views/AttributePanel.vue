@@ -2,12 +2,6 @@
     <div class="attribute-panel">
         <t-card :bordered="false">
             <!-- <DebugInfo /> -->
-            <div class="content">
-                {{ attributeStore.docPath }}
-            </div>
-            <div class="content">
-                {{ attributeStore.content }}
-            </div>
             <template v-if="attributeStore.inspectBlockId">
                 <template v-for="attribute in monitor" :key="attribute">
                     <AttributeRow :name="attribute" />
@@ -63,6 +57,7 @@ watch(
 
 :deep(.t-card__body) {
     padding: 12px 12px;
+    padding-bottom: 0px;
 }
 
 .content {
