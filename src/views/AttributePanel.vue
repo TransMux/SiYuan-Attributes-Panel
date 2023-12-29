@@ -56,8 +56,8 @@ watch(
 }
 
 :deep(.t-card__body) {
-    padding: 12px 12px;
-    padding-bottom: 0px;
+    padding: 0px 0px;
+    padding-top: 12px;
 }
 
 .content {
