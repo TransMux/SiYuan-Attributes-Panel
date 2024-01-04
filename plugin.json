@@ -2,7 +2,7 @@
   "name": "SiYuan-Attribute-Panel",
   "author": "Mux",
   "url": "https://github.com/InEase/SiYuan-Attribute-Panel",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "minAppVersion": "2.10.13",
   "backends": ["windows", "linux", "darwin"],
   "frontends": ["desktop", "desktop-window"],
