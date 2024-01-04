@@ -33,7 +33,9 @@ export default class PluginSample extends Plugin {
 
             if (targetNode) {
                 // if has mux-attribute-panel, return
-                if (document.querySelector('#mux-attribute-panel')) return
+                // 刷新文档会重复插入属性面板
+                // https://github.com/InEase/SiYuan-Attributes-Panel/issues/1
+                if (openedProtyle.element.getElementsByClassName("mux-attribute-panel").length > 0) return
 
                 // Step 3: Insert a new div element with class 'mux-attribute-panel' after the target node
                 const newDiv = document.createElement('div');
