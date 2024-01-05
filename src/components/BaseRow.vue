@@ -6,18 +6,14 @@
                 <icon :name="icon" />
             </template>
         </t-select>
-        <!-- This is rendered by displayElement. -->
-        <t-loading :loading="submitting" size="small">
-            <slot />
-        </t-loading>
+        <slot />
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { Icon } from 'tdesign-icons-vue-next';
 
-const props = defineProps({
+defineProps({
     name: {
         type: String,
         required: true,
@@ -37,13 +33,31 @@ const props = defineProps({
         default: () => { }
     },
 });
+</script>
 
-const submitting = ref(false);
 
-function handleSubmit(text) {
-    submitting.value = true;
-    props.callback(text)
-    submitting.value = false;
+<style scoped>
+/* make select and input in one row */
+.attribute-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
 }
 
-</script>
+:deep(.t-input:not(:hover)) {
+    border: white;
+}
+
+:deep(.t-input--focused) {
+    border-color: var(--td-brand-color);
+}
+
+.attr-selector {
+    width: 150px;
+    margin-right: 8px;
+}
+
+:deep(.t-icon) {
+    margin-right: 4px;
+}
+</style>
