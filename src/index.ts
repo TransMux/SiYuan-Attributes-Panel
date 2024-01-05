@@ -52,10 +52,10 @@ export default class PluginSample extends Plugin {
                 app.provide("$blockId", openedProtyle.block.id); // Replace 'new Vue()' with your EventBus instance
                 app.mount(newDiv);
             } else {
-                console.error('Target child div not found');
+                console.log('Target child div not found');
             }
         } else {
-            console.error('Parent node not found');
+            console.log('Parent node not found');
         }
     }
 }
