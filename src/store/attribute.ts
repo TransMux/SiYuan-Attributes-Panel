@@ -15,6 +15,7 @@ export const useAttributesStore = defineStore("attributes", {
       const ruleStore = useRuleStore();
 
       const attributes = this.attributes;
+      window.attributes = attributes
       const orderResult = {};
       Object.keys(attributes)
         .flatMap((key) => {

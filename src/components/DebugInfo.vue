@@ -2,6 +2,7 @@
     <div class="attribute-info">
         <div>Inspecting: {{ attributeStore.inspectBlockId }}</div>
         <div>Attributes: {{ attributeStore.attributes }}</div>
+        <div>avs: {{ attributeStore.avs }}</div>
     </div>
 </template>
 

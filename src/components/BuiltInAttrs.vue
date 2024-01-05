@@ -43,6 +43,7 @@ watch(
             }
         }
         monitor.value = result;
+        console.log(monitor.value, attributeStore.ordered)
     }, { deep: true });
 </script>
 

@@ -5,10 +5,20 @@
         </template>
 
         <template v-else>
-            <t-tabs :default-value="1">
-                <t-tab-panel :value="1" label="内置属性">
-                    <BuiltInAttrs />
+            <t-tabs :default-value="attributeStore.avs[0].avID">
+                <t-tab-panel value="builtin" label="内置属性">
+                    <KeepAlive>
+                        <BuiltInAttrs />
+                    </KeepAlive>
                 </t-tab-panel>
+
+                <template v-for="av in attributeStore.avs" :key="av.avID">
+                    <t-tab-panel :value="av.avID" :label="av.avName || av.avID">
+                        <KeepAlive>
+                            <DbAttrs :avID="av.avID" />
+                        </KeepAlive>
+                    </t-tab-panel>
+                </template>
             </t-tabs>
 
         </template>
@@ -22,27 +32,6 @@ import { ref, watch } from 'vue';
 // 通过一个块id，渲染对应的属性面板
 
 const attributeStore = useAttributesStore();
-const ruleStore = useRuleStore();
-
-const monitor = ref(attributeStore.ordered);
-
-watch(
-    () => attributeStore.attributes,
-    () => {
-        const result = Object.keys(attributeStore.ordered);
-        // render templates
-        for (const template of Object.values(ruleStore.userTemplates)) {
-            if (!template.display(attributeStore.attributes)) continue;
-
-            // merge template.attributes
-            for (const attribute of template.attributes) {
-                if (!result.includes(attribute)) {
-                    result.push(attribute);
-                }
-            }
-        }
-        monitor.value = result;
-    }, { deep: true });
 </script>
 
 <style scoped>
