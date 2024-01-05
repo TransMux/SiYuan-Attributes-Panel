@@ -16,5 +16,7 @@ declare module 'vue' {
     TLoading: typeof import('tdesign-vue-next')['Loading']
     TOption: typeof import('tdesign-vue-next')['Option']
     TSelect: typeof import('tdesign-vue-next')['Select']
+    TTabPanel: typeof import('tdesign-vue-next')['TabPanel']
+    TTabs: typeof import('tdesign-vue-next')['Tabs']
   }
 }

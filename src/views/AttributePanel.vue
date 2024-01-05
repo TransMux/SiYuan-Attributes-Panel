@@ -1,18 +1,22 @@
 <template>
     <div class="attribute-panel">
-        <t-card :bordered="false">
-            <!-- <DebugInfo /> -->
-            <template v-if="attributeStore.inspectBlockId">
-                <template v-for="attribute in monitor" :key="attribute">
-                    <AttributeRow :name="attribute" />
-                </template>
-                <AttributeRowAdd />
-            </template>
+        <t-tabs :default-value="1">
+            <t-tab-panel :value="1" label="选项卡1">
+                <t-card :bordered="false" style="margin: 20px">
+                    <!-- <DebugInfo /> -->
+                    <template v-if="attributeStore.inspectBlockId">
+                        <template v-for="attribute in monitor" :key="attribute">
+                            <AttributeRow :name="attribute" />
+                        </template>
+                        <AttributeRowAdd />
+                    </template>
 
-            <template v-else>
-                暂无属性
-            </template>
-        </t-card>
+                    <template v-else>
+                        暂无属性
+                    </template>
+                </t-card>
+            </t-tab-panel>
+        </t-tabs>
     </div>
 </template>
 
@@ -57,7 +61,10 @@ watch(
 
 :deep(.t-card__body) {
     padding: 0px 0px;
-    padding-top: 12px;
+}
+
+:deep(.t-card) {
+    margin-top: 8px;
 }
 
 .content {
