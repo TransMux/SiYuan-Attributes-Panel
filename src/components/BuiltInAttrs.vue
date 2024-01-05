@@ -1,26 +1,27 @@
 <template>
-    <div class="attribute-panel">
-        <template v-if="attributeStore.avs.length === 0">
-            <BuiltInAttrs />
+    <t-card :bordered="false">
+        <!-- <DebugInfo /> -->
+        <template v-if="attributeStore.inspectBlockId">
+            <template v-for="attribute in monitor" :key="attribute">
+                <AttributeRow :name="attribute" />
+            </template>
+            <AttributeRowAdd />
         </template>
 
         <template v-else>
-            <t-tabs :default-value="1">
-                <t-tab-panel :value="1" label="内置属性">
-                    <BuiltInAttrs />
-                </t-tab-panel>
-            </t-tabs>
-
+            暂无属性
         </template>
-    </div>
+    </t-card>
 </template>
 
+
 <script setup lang="ts">
+import AttributeRow from '@/components/AttributeRow.vue';
 import { useAttributesStore } from '@/store/attribute';
 import { useRuleStore } from '@/store/rules';
 import { ref, watch } from 'vue';
-// 通过一个块id，渲染对应的属性面板
 
+// 通过一个块id，渲染对应的属性面板
 const attributeStore = useAttributesStore();
 const ruleStore = useRuleStore();
 
@@ -45,6 +46,7 @@ watch(
     }, { deep: true });
 </script>
 
+
 <style scoped>
 .form-step-container {
     background-color: var(--td-bg-color-container);
@@ -55,10 +57,6 @@ watch(
 
 :deep(.t-card__body) {
     padding: 0px 0px;
-}
-
-:deep(.t-card) {
-    margin-top: 8px;
 }
 
 .content {
