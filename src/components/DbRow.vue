@@ -49,6 +49,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAttributesStore } from '@/store/attribute';
 import BaseRow from './BaseRow.vue';
 
 function handleSubmit(text) {
@@ -71,37 +72,15 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    cellID: {
-        type: String,
+    fieldIndex: {
+        type: Number,
         required: true,
-    },
-    keyID: {
-        type: String,
-        required: true,
-    },
-    rowID: {
-        type: String,
-        required: true,
-    },
-
-    name: {
-        type: String,
-        required: true,
-    },
-    value: {
-        type: String,
-        required: true,
-    },
-    type: {
-        type: String,
-        required: true,
-    },
-
-    // --- Type Specific Items ---
-    options: {
-        type: Array,
-        required: false,
-        default: () => [],
     },
 });
+
+const attributeStore = useAttributesStore();
+
+const targetTable = attributeStore.avs[props.avID]
+const targetField = targetTable.fields[props.fieldIndex]
+const { cellID, keyID, rowID, name, value, type, options } = targetField
 </script>

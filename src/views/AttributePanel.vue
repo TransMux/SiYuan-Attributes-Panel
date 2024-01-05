@@ -1,21 +1,21 @@
 <template>
     <div class="attribute-panel">
-        <template v-if="attributeStore.avs.length === 0">
+        <template v-if="Object.keys(attributeStore.avs).length === 0">
             <BuiltInAttrs />
         </template>
 
         <template v-else>
-            <t-tabs :default-value="attributeStore.avs[0].avID">
+            <t-tabs :default-value="Object.keys(attributeStore.avs)[0]">
                 <t-tab-panel value="builtin" label="内置属性">
                     <KeepAlive>
                         <BuiltInAttrs />
                     </KeepAlive>
                 </t-tab-panel>
 
-                <template v-for="av in attributeStore.avs" :key="av.avID">
-                    <t-tab-panel :value="av.avID" :label="av.avName || av.avID">
+                <template v-for="(av, avID) in attributeStore.avs" :key="avID">
+                    <t-tab-panel :value="avID" :label="av.avName || avID">
                         <KeepAlive>
-                            <DbAttrs :avID="av.avID" />
+                            <DbAttrs :avID="avID" />
                         </KeepAlive>
                     </t-tab-panel>
                 </template>

@@ -2,6 +2,9 @@
     <t-card :bordered="false">
         <DebugInfo />
         <template v-if="avID">
+            <template v-for="(item, index) in targetTable.fields" :key="item.cellID">
+                <DbRow :avID="avID" :fieldIndex="index" />
+            </template>
 
             <!-- <AttributeRowAdd /> -->
         </template>
@@ -14,10 +17,8 @@
 
 
 <script setup lang="ts">
-import AttributeRow from '@/components/AttributeRow.vue';
 import { useAttributesStore } from '@/store/attribute';
-import { useRuleStore } from '@/store/rules';
-import { ref, watch } from 'vue';
+import DbRow from './DbRow.vue';
 
 const props = defineProps({
     avID: {
@@ -29,9 +30,7 @@ const props = defineProps({
 // 通过数据库id，渲染对应的属性面板
 const attributeStore = useAttributesStore();
 
-const targetTable = attributeStore.avs.find((av) => av.avID === props.avID)
-console.log(targetTable)
-
+const targetTable = attributeStore.avs[props.avID]
 </script>
 
 

@@ -8,14 +8,14 @@ export const useAttributesStore = defineStore("attributes", {
     attributes: {},
     content: "",
     docPath: "打开一个文档以获取文档信息...", // 当前文档人类可读路径，包括笔记本
-    avs: [], // 当前文档所有数据库
+    avs: {}, // 当前文档所有数据库
   }),
   getters: {
     ordered() {
       const ruleStore = useRuleStore();
 
       const attributes = this.attributes;
-      window.attributes = attributes
+      window.attributes = attributes;
       const orderResult = {};
       Object.keys(attributes)
         .flatMap((key) => {
@@ -50,12 +50,7 @@ export const useAttributesStore = defineStore("attributes", {
         (res: any) => {
           this.attributes = res.data;
           // doc check
-          if ("title" in this.attributes && "scroll" in this.attributes) {
-            const startId = JSON.parse(this.attributes.scroll).startId;
-            if (!startId) {
-              return;
-            }
-
+          if ("title" in this.attributes) {
             // attributes views check
             if ("custom-avs" in this.attributes) {
               // TODO: Unstable API
@@ -95,7 +90,7 @@ export const useAttributesStore = defineStore("attributes", {
                       }
                     );
 
-                    this.avs.push(database);
+                    this.avs[av.avID] = database;
                   }
                 }
               );

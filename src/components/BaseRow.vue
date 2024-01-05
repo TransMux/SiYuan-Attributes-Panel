@@ -1,6 +1,7 @@
 <template>
     <div class="attribute-row">
-        <t-select v-model="name" :borderless="true" class="attr-selector" placeholder="-请选择-" :showArrow="false" readonly>
+        <t-select :default-value="name" :borderless="true" class="attr-selector" placeholder="-请选择-" :showArrow="false"
+            readonly>
             <template #prefixIcon>
                 <icon :name="icon" />
             </template>
@@ -14,6 +15,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { Icon } from 'tdesign-icons-vue-next';
 
 const props = defineProps({
     name: {
