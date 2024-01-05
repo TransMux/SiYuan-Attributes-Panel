@@ -1,6 +1,5 @@
 <template>
     <t-card :bordered="false">
-        <DebugInfo />
         <template v-if="avID">
             <template v-for="(item, index) in targetTable.fields" :key="item.cellID">
                 <DbRow :avID="avID" :fieldIndex="index" />

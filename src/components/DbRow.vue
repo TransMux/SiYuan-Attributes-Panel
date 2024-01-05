@@ -9,17 +9,17 @@
 
         <!-- 文本 -->
         <template v-else-if="type === 'text'">
-            <t-input v-model="value" :borderless="true" placeholder="请输入" />
+            <t-input v-model="value.content" :borderless="true" placeholder="请输入" />
         </template>
 
         <!-- 链接 -->
         <template v-else-if="type === 'url'">
-            <t-input v-model="value" :borderless="true" placeholder="请输入" />
+            <t-input v-model="value.content" :borderless="true" placeholder="请输入" />
         </template>
 
         <!-- 数字 -->
         <template v-else-if="type === 'number'">
-            <t-input-number v-model="value" :borderless="true" placeholder="请输入" />
+            <t-input-number v-model="value.content" :borderless="true" placeholder="请输入" />
         </template>
 
         <!-- 多选 -->
@@ -29,17 +29,17 @@
 
         <!-- 日期 -->
         <template v-else-if="type === 'date'">
-            <t-date-picker v-model="value" :borderless="true" placeholder="请选择" />
+            <t-date-picker v-model="value.content" :borderless="true" placeholder="请选择" />
         </template>
 
         <!-- 复选框 -->
         <template v-else-if="type === 'checkbox'">
-            <t-checkbox v-model="value" :borderless="true" />
+            <t-checkbox v-model="value.checked" :borderless="true" />
         </template>
 
         <!-- 模板 -->
         <template v-else-if="type === 'template'">
-            <t-input v-model="value" :borderless="true" placeholder="请输入" />
+            <t-input v-model="value.content" :borderless="true" placeholder="请输入" />
         </template>
 
         <template v-else>
