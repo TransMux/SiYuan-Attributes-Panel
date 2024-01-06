@@ -33,7 +33,14 @@
 
         <!-- 日期 -->
         <template v-else-if="type === 'date'">
-            <t-date-picker v-model="value.content" :borderless="true" placeholder="请选择" />
+            <template v-if="!value.hasEndDate">
+                <t-date-picker v-model="value.content" :borderless="true" placeholder="请选择"
+                    :enableTimePicker="!value.isNotTime" allow-input />
+            </template>
+            <template v-else>
+                <t-date-range-picker v-model="dateRange" :borderless="true" placeholder="请选择"
+                    :enableTimePicker="!value.isNotTime" allow-input />
+            </template>
         </template>
 
         <!-- 复选框 -->
@@ -55,6 +62,7 @@
 <script setup lang="ts">
 import { useAttributesStore } from '@/store/attribute';
 import BaseRow from './BaseRow.vue';
+import { computed } from 'vue';
 
 function handleSubmit(text) {
     console.log("Submit", text)
@@ -87,4 +95,20 @@ const attributeStore = useAttributesStore();
 const targetTable = attributeStore.avs[props.avID]
 const targetField = targetTable.fields[props.fieldIndex]
 const { cellID, keyID, rowID, name, value, type, options } = targetField
+
+const dateRange = computed({
+    get() {
+        if (type !== "date" || !value.hasEndDate) {
+            return undefined
+        } else {
+            return [value.content, value.content2]
+        }
+    },
+    set(newValue) {
+        console.log("set", newValue)
+        value.content = newValue[0]
+        value.content2 = newValue[1]
+    }
+})
+
 </script>

@@ -18,6 +18,7 @@ declare module 'vue' {
     TCard: typeof import('tdesign-vue-next')['Card']
     TCheckbox: typeof import('tdesign-vue-next')['Checkbox']
     TDatePicker: typeof import('tdesign-vue-next')['DatePicker']
+    TDateRangePicker: typeof import('tdesign-vue-next')['DateRangePicker']
     TIcon: typeof import('tdesign-vue-next')['Icon']
     TInput: typeof import('tdesign-vue-next')['Input']
     TInputNumber: typeof import('tdesign-vue-next')['InputNumber']
