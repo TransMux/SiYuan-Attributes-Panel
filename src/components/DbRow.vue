@@ -35,11 +35,11 @@
         <template v-else-if="type === 'date'">
             <template v-if="!value.hasEndDate">
                 <t-date-picker v-model="value.content" :borderless="true" placeholder="请选择"
-                    :enableTimePicker="!value.isNotTime" allow-input />
+                    :enableTimePicker="!value.isNotTime" allow-input @change="handleDateChange" />
             </template>
             <template v-else>
                 <t-date-range-picker v-model="dateRange" :borderless="true" placeholder="请选择"
-                    :enableTimePicker="!value.isNotTime" allow-input />
+                    :enableTimePicker="!value.isNotTime" allow-input @change="handleDateChange" />
             </template>
         </template>
 
@@ -133,6 +133,27 @@ function handleChange(x, context) {
     if (["add", "reduce", "blur", "enter", "clear"].indexOf(context.type) === -1) {
         return
     }
+
+    fetchPost(
+        "/api/av/setAttributeViewBlockAttr",
+        {
+            "avID": props.avID,
+            "cellID": cellID,
+            "keyID": keyID,
+            "rowID": rowID,
+            "value": {
+                [type]: {
+                    "content": x
+                }
+            },
+        },
+    );
+}
+
+
+function handleDateChange(x, { dayjsValue }) {
+    // 转换为时间戳
+    const data = dayjsValue.map((item) => item.unix())
 
     fetchPost(
         "/api/av/setAttributeViewBlockAttr",
