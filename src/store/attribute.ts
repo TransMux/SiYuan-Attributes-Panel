@@ -77,6 +77,12 @@ export const useAttributesStore = defineStore("attributes", {
                           return [];
                         }
                         const value = values[0];
+
+                        let cellValue = value[value.type];
+                        if (value.type === "select") {
+                          cellValue = value.mSelect;
+                        }
+
                         return [
                           {
                             name: key.name,
@@ -84,7 +90,8 @@ export const useAttributesStore = defineStore("attributes", {
                             keyID: value.keyID,
                             rowID: value.blockID,
                             type: value.type,
-                            value: value[value.type],
+                            value: cellValue,
+                            options: key.options,
                           },
                         ];
                       }
