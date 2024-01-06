@@ -4,7 +4,9 @@
 
         <!-- 单选 -->
         <template v-if="type === 'select'">
-            <t-select v-model="value" :borderless="true" placeholder="-请选择-" :options="options" />
+            <t-select v-model="value" :borderless="true" placeholder="-请选择-" valueDisplay="content">
+                <t-option v-for="(item, index) in options" :key="index" :value="index" :label="item.name"></t-option>
+            </t-select>
         </template>
 
         <!-- 文本 -->
@@ -24,7 +26,9 @@
 
         <!-- 多选 -->
         <template v-else-if="type === 'mSelect'">
-            <t-select v-model="value" :borderless="true" placeholder="-请选择-" :options="options" multiple />
+            <t-select v-model="value" :borderless="true" placeholder="-请选择-" multiple>
+                <t-option v-for="(item, index) in options" :key="index" :value="index" :label="item.name"></t-option>
+            </t-select>
         </template>
 
         <!-- 日期 -->
