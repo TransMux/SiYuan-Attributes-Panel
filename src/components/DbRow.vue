@@ -21,7 +21,7 @@
 
         <!-- 数字 -->
         <template v-else-if="type === 'number'">
-            <t-input-number v-model="value.content" :borderless="true" placeholder="请输入" />
+            <t-input-number v-model="value.content" :borderless="true" placeholder="请输入" @change="handleChange" />
         </template>
 
         <!-- 多选 -->
@@ -111,6 +111,29 @@ const dateRange = computed({
 
 function handleSubmit(x) {
     console.log("handleInputBlur", x)
+    fetchPost(
+        "/api/av/setAttributeViewBlockAttr",
+        {
+            "avID": props.avID,
+            "cellID": cellID,
+            "keyID": keyID,
+            "rowID": rowID,
+            "value": {
+                [type]: {
+                    "content": x
+                }
+            },
+        },
+    );
+}
+
+function handleChange(x, context) {
+    console.log("handleChange", x, context)
+    // 'add' | 'reduce' | 'input' | 'blur' | 'enter' | 'clear' | 'props'
+    if (["add", "reduce", "blur", "enter", "clear"].indexOf(context.type) === -1) {
+        return
+    }
+
     fetchPost(
         "/api/av/setAttributeViewBlockAttr",
         {
