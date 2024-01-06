@@ -6,14 +6,17 @@
 
         <template v-else>
             <t-tabs :default-value="Object.keys(attributeStore.avs)[0]">
-                <t-tab-panel value="builtin" label="内置属性">
+                <t-tab-panel value="builtin">
+                    <template #label> <t-icon name="table-1" class="tabs-icon-margin" /> 内置属性 </template>
                     <KeepAlive>
                         <BuiltInAttrs />
                     </KeepAlive>
                 </t-tab-panel>
 
                 <template v-for="(av, avID) in attributeStore.avs" :key="avID">
-                    <t-tab-panel :value="avID" :label="av.avName || avID">
+                    <t-tab-panel :value="avID">
+                        <template #label> <t-icon name="data-base" class="tabs-icon-margin" /> {{ av.avName || avID }}
+                        </template>
                         <KeepAlive>
                             <DbAttrs :avID="avID" />
                         </KeepAlive>
@@ -56,5 +59,9 @@ const attributeStore = useAttributesStore();
     font-size: 14px;
     line-height: 20px;
     margin-bottom: 4px;
+}
+
+.tabs-icon-margin {
+    margin-right: 4px;
 }
 </style>
