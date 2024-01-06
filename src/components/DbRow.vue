@@ -50,7 +50,7 @@
 
         <!-- 模板 -->
         <template v-else-if="type === 'template'">
-            <t-input v-model="value.content" :borderless="true" placeholder="请输入" />
+            <t-input v-model="value.content" :borderless="true" placeholder="请输入" readonly />
         </template>
 
         <template v-else>
