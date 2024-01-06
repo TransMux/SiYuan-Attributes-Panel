@@ -1,6 +1,6 @@
 
 <template>
-    <BaseRow :name="name" :key="cellID" :icon="siyuanDatabaseIcons[type]" :callback="handleSubmit">
+    <BaseRow :name="name" :key="cellID" :icon="siyuanDatabaseIcons[type]">
 
         <!-- 单选 -->
         <template v-if="type === 'select'">
@@ -11,12 +11,12 @@
 
         <!-- 文本 -->
         <template v-else-if="type === 'text'">
-            <t-input v-model="value.content" :borderless="true" placeholder="请输入" />
+            <t-input v-model="value.content" :borderless="true" placeholder="请输入" @blur="handleSubmit" />
         </template>
 
         <!-- 链接 -->
         <template v-else-if="type === 'url'">
-            <t-input v-model="value.content" :borderless="true" placeholder="请输入" />
+            <t-input v-model="value.content" :borderless="true" placeholder="请输入" @blur="handleSubmit" />
         </template>
 
         <!-- 数字 -->
@@ -63,10 +63,8 @@
 import { useAttributesStore } from '@/store/attribute';
 import BaseRow from './BaseRow.vue';
 import { computed } from 'vue';
+import { fetchPost } from 'siyuan';
 
-function handleSubmit(text) {
-    console.log("Submit", text)
-}
 
 const siyuanDatabaseIcons = {
     'text': 'view-list',
@@ -110,5 +108,23 @@ const dateRange = computed({
         value.content2 = newValue[1]
     }
 })
+
+function handleSubmit(x) {
+    console.log("handleInputBlur", x)
+    fetchPost(
+        "/api/av/setAttributeViewBlockAttr",
+        {
+            "avID": props.avID,
+            "cellID": cellID,
+            "keyID": keyID,
+            "rowID": rowID,
+            "value": {
+                [type]: {
+                    "content": x
+                }
+            },
+        },
+    );
+}
 
 </script>
