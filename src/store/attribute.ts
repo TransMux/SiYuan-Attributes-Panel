@@ -1,51 +1,156 @@
 import { defineStore } from "pinia";
 import { fetchPost } from "siyuan";
-import { useRuleStore } from "@/store/rules";
 import { reactive } from "vue";
+import { Plugin } from "siyuan";
+import { Ref, UnwrapRef, computed, inject, ref, unref, watch } from "vue";
+
+const pluginKey = "mux-siyuan-plugin-attributes-panel";
+
+export const useAttributesStore = defineStore(pluginKey, () => {
+  // Defining a Store using Setup | Pinia
+  // https://pinia.vuejs.org/core-concepts/#Setup-Stores
+  const plugin = inject("$plugin") as Plugin;
+
+  function useSiYuanStore<T>(key: string, defaultValue: T): Ref<UnwrapRef<T>> {
+    const data = ref(defaultValue);
+    const storageKey = `${pluginKey}-${key}`
+
+    async function load() {
+      const config = await plugin.loadData(storageKey);
+      console.log("### load", storageKey, config);
+      if (!config) {
+        await plugin.saveData(storageKey, unref(defaultValue));
+        return defaultValue;
+      }
+      return config;
+    }
+
+    async function save() {
+      console.log("### save", storageKey, unref(data));
+      await plugin.saveData(storageKey, unref(data));
+    }
+
+    // Sync with SiYuan Settings
+    setTimeout(async () => {
+      data.value = await load();
+
+      // Save when change
+      watch(data, async () => {
+        await save();
+      });
+    });
+
+    return data;
+  }
+
+  // --- Setting Persist Storage ---
+  const configuration = useSiYuanStore("configuration", {
+    show: true,
+    showSettings: {
+      "page": true,
+      "block": false,
+    }
+  });
+
+  // --- Attributes Data Storages ---
+  const inspectBlockId = ""
+  const bulitInAttributes = reactive({}) // 内置数据库属性
+  const dataBaseAttributes = reactive({}) // 当前文档所有数据库属性
+  const pageBlockAttributes = reactive({}) // 当前块属性
+
+  function fetchAttributes(blockId: string) {
+    fetchPost(
+      "/api/attr/getBlockAttrs",
+      {
+        id: blockId,
+      },
+      (res: any) => {
+        this.attributes = res.data;
+        // doc check
+        if ("title" in this.attributes) {
+          // attributes views check
+          if ("custom-avs" in this.attributes) {
+            fetchPost(
+              "/api/av/getAttributeViewKeys",
+              {
+                id: blockId,
+              },
+              ({ data }) => {
+                if (!data || data.length === 0) {
+                  return;
+                }
+
+                for (const av of data) {
+                  // 遍历所有的数据库，转换为关注的数据格式
+
+                  const database = { ...av, fields: [] };
+                  delete database.keyValues;
+
+                  database.fields = av.keyValues.flatMap(
+                    ({ key, values }) => {
+                      // 跳过主键
+                      if (key.type === "block") {
+                        return [];
+                      }
+                      const value = values[0];
+
+                      let cellValue = value[value.type];
+                      if (value.type === "select") {
+                        cellValue = value.mSelect;
+                      }
+
+                      if (value.type === "select" || value.type === "mSelect") {
+                        // change every cellValue {content: "aaa", color: "1"} -> index
+                        // 暂时屏蔽name和content的区别，暂时屏蔽对象，注意如果以后content不唯一，这里绝对会出问题
+                        cellValue = {
+                          "content": cellValue.map((v) => {
+                            return key.options.findIndex(
+                              (option) => option.name === v.content
+                            );
+                          })
+                        }
+                      }
+
+                      return [
+                        {
+                          name: key.name,
+                          cellID: value.id,
+                          keyID: value.keyID,
+                          rowID: value.blockID,
+                          type: value.type,
+                          value: cellValue,
+                          options: key.options,
+                        },
+                      ];
+                    }
+                  );
+
+                  this.avs[av.avID] = database;
+                }
+              }
+            );
+          }
+
+          console.log("Converted Attribute Views", this.avs);
+        }
+      }
+    );
+  }
+
+  return { configuration, inspectBlockId, bulitInAttributes, dataBaseAttributes, pageBlockAttributes };
+});
+
+
+
+
 
 export const useAttributesStore = defineStore("attributes", {
-  state: () => ({
-    inspectBlockId: "20231101144112-klqcrrt",
-    attributes: {},
-    content: "",
-    docPath: "打开一个文档以获取文档信息...", // 当前文档人类可读路径，包括笔记本
-    avs: reactive({}), // 当前文档所有数据库
-  }),
-  getters: {
-    ordered() {
-      const ruleStore = useRuleStore();
-
-      const attributes = this.attributes;
-      const orderResult = {};
-      Object.keys(attributes)
-        .flatMap((key) => {
-          const conrespondingRule = ruleStore.displayRules[key];
-          if (conrespondingRule && !conrespondingRule.display) {
-            // 不显示
-            return [];
-          }
-          return [key];
-        })
-        .sort((key) => {
-          const conrespondingRule = ruleStore.displayRules[key];
-          if (conrespondingRule) {
-            return conrespondingRule.order || 9999;
-          }
-          // 没有的排在最下面
-          return 99999;
-        })
-        .forEach((key) => {
-          orderResult[key] = attributes[key];
-        });
-      return orderResult;
-    },
-  },
   actions: {
     fetchAttributes() {
       fetchPost(
         "/api/attr/getBlockAttrs",
         {
-          id: this.inspectBlockId,
+          id: blockId,
         },
         (res: any) => {
           this.attributes = res.data;
