@@ -4,7 +4,7 @@
 
         <!-- 单选 -->
         <template v-if="type === 'select'">
-            <t-select v-model="value" :borderless="true" placeholder="-请选择-">
+            <t-select v-model="selectValue" :borderless="true" placeholder="-请选择-">
                 <t-option v-for="(item, index) in options" :key="index" :value="index" :label="item.name"></t-option>
             </t-select>
         </template>
@@ -26,7 +26,7 @@
 
         <!-- 多选 -->
         <template v-else-if="type === 'mSelect'">
-            <t-select v-model="value" :borderless="true" placeholder="-请选择-" multiple>
+            <t-select v-model="selectValue" :borderless="true" placeholder="-请选择-" multiple>
                 <t-option v-for="(item, index) in options" :key="index" :value="index" :label="item.name"></t-option>
             </t-select>
         </template>
@@ -64,6 +64,7 @@ import { useAttributesStore } from '@/store/attribute';
 import BaseRow from './BaseRow.vue';
 import { computed } from 'vue';
 import { fetchPost } from 'siyuan';
+import { storeToRefs } from 'pinia';
 
 
 const siyuanDatabaseIcons = {
@@ -90,7 +91,8 @@ const props = defineProps({
 
 const attributeStore = useAttributesStore();
 
-const targetTable = attributeStore.avs[props.avID]
+const { avs } = storeToRefs(attributeStore)
+const targetTable = avs.value[props.avID]
 const targetField = targetTable.fields[props.fieldIndex]
 const { cellID, keyID, rowID, name, value, type, options } = targetField
 
@@ -106,6 +108,46 @@ const dateRange = computed({
         console.log("set", newValue)
         value.content = newValue[0]
         value.content2 = newValue[1]
+    }
+})
+
+const selectValue = computed({
+    get() {
+        if (type === "select") {
+            return value.content[0]
+        } else if (type === "mSelect") {
+            return value.content
+        } else {
+            return undefined
+        }
+    },
+    set(newValue) {
+        console.log("set", newValue)
+        if (type === "select") {
+            value.content[0] = newValue
+        } else if (type === "mSelect") {
+            value.content = newValue
+        }
+
+        // 映射回去options
+        const optionsValue = value.content.map((item) => {
+            return options[item]
+        })
+
+        fetchPost(
+            "/api/av/setAttributeViewBlockAttr",
+            {
+                "avID": props.avID,
+                "cellID": cellID,
+                "keyID": keyID,
+                "rowID": rowID,
+                "value": {
+                    "mSelect": {
+                        "content": optionsValue
+                    }
+                },
+            },
+        );
     }
 })
 
@@ -168,7 +210,7 @@ function handleChange(x, context) {
 }
 
 
-function handleDateChange(x, { dayjsValue }) {
+function handleDateChange(_, { dayjsValue }) {
     // 转换为时间戳
     if (type === "date") {
         if (value.hasEndDate) {

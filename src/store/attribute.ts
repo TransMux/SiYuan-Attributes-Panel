@@ -86,14 +86,12 @@ export const useAttributesStore = defineStore("attributes", {
                         if (value.type === "select" || value.type === "mSelect") {
                           // change every cellValue {content: "aaa", color: "1"} -> index
                           // 暂时屏蔽name和content的区别，暂时屏蔽对象，注意如果以后content不唯一，这里绝对会出问题
-                          cellValue = cellValue.map((v) => {
-                            return key.options.findIndex(
-                              (option) => option.name === v.content
-                            );
-                          });
-
-                          if (cellValue.length === 1) {
-                            cellValue = cellValue[0];
+                          cellValue = {
+                            "content": cellValue.map((v) => {
+                              return key.options.findIndex(
+                                (option) => option.name === v.content
+                              );
+                            })
                           }
                         }
 
@@ -118,20 +116,6 @@ export const useAttributesStore = defineStore("attributes", {
             }
 
             console.log("Converted Attribute Views", this.avs);
-
-            // 通过获取第一个块的面包屑来获取文档路径和文档内容
-            fetchPost(
-              "/api/block/getBlockBreadcrumb",
-              {
-                id: startId,
-              },
-              (res: any) => {
-                const breadcrumb = res.data;
-                this.docPath = breadcrumb[0].name;
-                this.setContent(breadcrumb[1].name);
-                console.log("updated doc path", this.docPath, this.content);
-              }
-            );
           }
         }
       );
