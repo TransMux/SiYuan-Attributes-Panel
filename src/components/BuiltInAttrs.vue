@@ -2,7 +2,7 @@
     <t-card :bordered="false">
         <!-- <DebugInfo /> -->
         <template v-if="attributeStore.inspectBlockId">
-            <template v-for="attribute in monitor" :key="attribute">
+            <template v-for="attribute in Object.keys(monitor)" :key="attribute">
                 <AttributeRow :name="attribute" />
             </template>
             <AttributeRowAdd />
@@ -26,6 +26,7 @@ const attributeStore = useAttributesStore();
 const ruleStore = useRuleStore();
 
 const monitor = ref(attributeStore.ordered);
+console.log(monitor.value, attributeStore.attributes)
 
 watch(
     () => attributeStore.attributes,
