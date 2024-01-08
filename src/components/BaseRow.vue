@@ -18,10 +18,6 @@ defineProps({
         type: String,
         required: true,
     },
-    key: {
-        type: String,
-        required: true,
-    },
     icon: {
         type: String,
         required: false,
