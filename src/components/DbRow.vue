@@ -153,7 +153,14 @@ function handleChange(x, context) {
 
 function handleDateChange(x, { dayjsValue }) {
     // 转换为时间戳
-    const data = dayjsValue.map((item) => item.unix())
+    if (type === "date") {
+        if (value.hasEndDate) {
+            value.content = dayjsValue[0].unix() * 1000
+            value.content2 = dayjsValue[1].unix() * 1000
+        } else {
+            value.content = dayjsValue.unix() * 1000
+        }
+    }
 
     fetchPost(
         "/api/av/setAttributeViewBlockAttr",
@@ -162,11 +169,7 @@ function handleDateChange(x, { dayjsValue }) {
             "cellID": cellID,
             "keyID": keyID,
             "rowID": rowID,
-            "value": {
-                [type]: {
-                    "content": x
-                }
-            },
+            "value": value
         },
     );
 }
