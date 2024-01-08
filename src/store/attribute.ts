@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { fetchPost } from "siyuan";
 import { useRuleStore } from "@/store/rules";
+import { reactive } from "vue";
 
 export const useAttributesStore = defineStore("attributes", {
   state: () => ({
@@ -8,14 +9,13 @@ export const useAttributesStore = defineStore("attributes", {
     attributes: {},
     content: "",
     docPath: "打开一个文档以获取文档信息...", // 当前文档人类可读路径，包括笔记本
-    avs: {}, // 当前文档所有数据库
+    avs: reactive({}), // 当前文档所有数据库
   }),
   getters: {
     ordered() {
       const ruleStore = useRuleStore();
 
       const attributes = this.attributes;
-      window.attributes = attributes;
       const orderResult = {};
       Object.keys(attributes)
         .flatMap((key) => {
@@ -81,6 +81,20 @@ export const useAttributesStore = defineStore("attributes", {
                         let cellValue = value[value.type];
                         if (value.type === "select") {
                           cellValue = value.mSelect;
+                        }
+
+                        if (value.type === "select" || value.type === "mSelect") {
+                          // change every cellValue {content: "aaa", color: "1"} -> index
+                          // 暂时屏蔽name和content的区别，暂时屏蔽对象，注意如果以后content不唯一，这里绝对会出问题
+                          cellValue = cellValue.map((v) => {
+                            return key.options.findIndex(
+                              (option) => option.name === v.content
+                            );
+                          });
+
+                          if (cellValue.length === 1) {
+                            cellValue = cellValue[0];
+                          }
                         }
 
                         return [

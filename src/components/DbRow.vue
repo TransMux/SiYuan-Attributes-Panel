@@ -4,7 +4,7 @@
 
         <!-- 单选 -->
         <template v-if="type === 'select'">
-            <t-select v-model="value" :borderless="true" placeholder="-请选择-" valueDisplay="content">
+            <t-select v-model="value" :borderless="true" placeholder="-请选择-">
                 <t-option v-for="(item, index) in options" :key="index" :value="index" :label="item.name"></t-option>
             </t-select>
         </template>
