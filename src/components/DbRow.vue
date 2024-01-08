@@ -45,7 +45,7 @@
 
         <!-- 复选框 -->
         <template v-else-if="type === 'checkbox'">
-            <t-checkbox v-model="value.checked" :borderless="true" />
+            <t-checkbox v-model="value.checked" :borderless="true" @change="handleSubmit" />
         </template>
 
         <!-- 模板 -->
@@ -110,21 +110,38 @@ const dateRange = computed({
 })
 
 function handleSubmit(x) {
-    console.log("handleInputBlur", x)
-    fetchPost(
-        "/api/av/setAttributeViewBlockAttr",
-        {
-            "avID": props.avID,
-            "cellID": cellID,
-            "keyID": keyID,
-            "rowID": rowID,
-            "value": {
-                [type]: {
-                    "content": x
-                }
+    console.log("handleSubmit", x)
+    if (type === "checkbox") {
+        fetchPost(
+            "/api/av/setAttributeViewBlockAttr",
+            {
+                "avID": props.avID,
+                "cellID": cellID,
+                "keyID": keyID,
+                "rowID": rowID,
+                "value": {
+                    "checkbox": {
+                        "checked": x
+                    }
+                },
             },
-        },
-    );
+        );
+    } else {
+        fetchPost(
+            "/api/av/setAttributeViewBlockAttr",
+            {
+                "avID": props.avID,
+                "cellID": cellID,
+                "keyID": keyID,
+                "rowID": rowID,
+                "value": {
+                    [type]: {
+                        "content": x
+                    }
+                },
+            },
+        );
+    }
 }
 
 function handleChange(x, context) {
