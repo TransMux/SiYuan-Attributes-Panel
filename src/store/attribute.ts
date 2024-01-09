@@ -5,7 +5,7 @@ import { displayRule, useConfigStore } from "./rules";
 
 const pluginKey = "mux-siyuan-plugin-attributes-panel";
 
-interface innerAttribute extends displayRule {
+export interface innerAttribute extends displayRule {
   value: string;
 }
 
@@ -120,7 +120,7 @@ export const useAttributesStore = defineStore(pluginKey + "attrs", () => {
   }
 
   return {
-    documentId, bulitInAttributes: builtInAttributes, dataBaseAttributes, pageBlockAttributes, // Inner States
+    documentId, builtInAttributes, dataBaseAttributes, pageBlockAttributes, // Inner States
     fetchInnerAttributes, fetchDBAttributes // Fetch Attribute Actions
   };
 });
