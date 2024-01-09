@@ -1,65 +1,21 @@
 import { defineStore } from "pinia";
 import { fetchPost } from "siyuan";
-import { reactive } from "vue";
-import { Plugin } from "siyuan";
-import { Ref, UnwrapRef, inject, ref, unref, watch } from "vue";
+import { reactive, ref } from "vue";
+import { useConfigStore } from "./rules";
 
 const pluginKey = "mux-siyuan-plugin-attributes-panel";
 
-export const useAttributesStore = defineStore(pluginKey, () => {
+export const useAttributesStore = defineStore(pluginKey + "attrs", () => {
   // Data Flow Model
 
   // SiYuan --> Inner Store --> UI
   // UI --> API --> SiYuan --> Flush(Based on message --> function) --> UI
   // UI --> Inner Store (UnReliable, based on components)
 
-  const plugin = inject("$plugin") as Plugin;
-
-  function useSiYuanStore<T>(key: string, defaultValue: T): Ref<UnwrapRef<T>> {
-    const data = ref(defaultValue);
-    const storageKey = `${pluginKey}-${key}`
-
-    async function load() {
-      const config = await plugin.loadData(storageKey);
-      console.log("### load", storageKey, config);
-      if (!config) {
-        await plugin.saveData(storageKey, unref(defaultValue));
-        return defaultValue;
-      }
-      return config;
-    }
-
-    async function save() {
-      console.log("### save", storageKey, unref(data));
-      await plugin.saveData(storageKey, unref(data));
-    }
-
-    // Sync with SiYuan Settings
-    setTimeout(async () => {
-      data.value = await load();
-
-      // Save when change
-      watch(data, async () => {
-        await save();
-      });
-    });
-
-    return data;
-  }
-
-  // --- Setting Persist Storage ---
-  const configuration = useSiYuanStore("configuration", {
-    show: true,
-    showSettings: {
-      "page": true,
-      "block": false,
-    }
-  });
-
   // --- Attributes Data Storages ---
   const documentId = ""
-  const bulitInAttributes = reactive({}) // 内置数据库属性
-  const dataBaseAttributes = reactive({}) // 当前文档所有数据库属性
+  const builtInAttributes = ref([]) // 内置数据库属性
+  const dataBaseAttributes = ref([]) // 当前文档所有数据库属性
   const pageBlockAttributes = reactive({}) // 当前块属性
 
   function fetchInnerAttributes() {
@@ -68,11 +24,24 @@ export const useAttributesStore = defineStore(pluginKey, () => {
       {
         id: documentId,
       },
-      (res: any) => {
-        this.attributes = res.data;
-        // TODO: Convert Inner Attributes by rules and orders
+      ({ data }) => {
+        // --- 根据规则过滤, 排序属性 ---
+        for (const attributeName in data) {
+          const attributeValue = data[attributeName];
+
+          const rule = matchRules(attributeName);
+
+          if (rule && rule.display === true) {
+            builtInAttributes.value.push({ ...rule, value: attributeValue });
+          }
+        }
+        // order
+        builtInAttributes.value.sort((a, b) => {
+          return a.order - b.order;
+        })
+
         // attributes views check
-        if ("custom-avs" in this.attributes) {
+        if ("custom-avs" in data) {
           fetchDBAttributes();
         }
       }
@@ -145,8 +114,35 @@ export const useAttributesStore = defineStore(pluginKey, () => {
   }
 
   return {
-    configuration, documentId, bulitInAttributes, dataBaseAttributes, pageBlockAttributes, // Inner States
+    documentId, bulitInAttributes: builtInAttributes, dataBaseAttributes, pageBlockAttributes, // Inner States
     fetchInnerAttributes, fetchDBAttributes // Fetch Attribute Actions
   };
 });
 
+function matchRules(attributeName: string) {
+  const configStore = useConfigStore();
+  const rules = configStore.rules;
+
+  return rules.find((rule) => {
+    if (rule.matchMethod === '精确' && rule.rule === attributeName) {
+      return true;
+    }
+
+    if (rule.matchMethod === '通配符' && matchWild(attributeName, rule.rule)) {
+      return true;
+    }
+
+    if (rule.matchMethod === '正则' && matchRegex(attributeName, rule.rule)) {
+      return true;
+    }
+  });
+}
+
+function matchRegex(attributeName: string, rule: string) {
+  return false
+}
+
+function matchWild(attributeName: string, rule: string) {
+  // Wanna imporve this? goto Leetcode #44
+  return false
+}

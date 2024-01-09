@@ -99,7 +99,7 @@ const defaultdisplayRules: Array<displayRule> = [
 
 const pluginKey = "mux-siyuan-plugin-attributes-panel";
 
-export const useRuleStore = defineStore(pluginKey + "configurations", () => {
+export const useConfigStore = defineStore(pluginKey + "configurations", () => {
   const plugin = inject("$plugin") as Plugin;
 
   function useSiYuanStore<T>(key: string, defaultValue: T): Ref<UnwrapRef<T>> {
