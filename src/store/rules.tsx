@@ -1,233 +1,153 @@
 import { defineStore } from "pinia";
-// import { fetchPost } from "siyuan";
-import dayjs from "dayjs";
-import { Input, DatePicker, Link, Switch, TagInput } from "tdesign-vue-next";
-import {
-  CalendarEventIcon,
-  LinkIcon,
-  ViewListIcon,
-  ComponentSwitchIcon,
-  ViewAgendaIcon,
-} from "tdesign-icons-vue-next";
+import { Plugin } from "siyuan";
+import { Ref, UnwrapRef, inject, ref, unref, watch } from "vue";
 
 interface displayRule {
-  key: string; // 属性名
+  name: string; // 规则名
+
+  rule: string; // 匹配属性名 | 匹配规则 | 正则
+  matchMethod: string; // 匹配方法, 精确 | 通配符 | 正则
+  // TODO: 路径等其他属性的匹配 / 高级匹配
+
   display: boolean; // 是否显示
-  displayAs: string; // 显示名
-  editable: boolean; // 是否可编辑
-  dataType: string; // 数据类型，控制渲染方法
-  order: number; // 顺序
-  icon?: any; // 图标
+  renderMethod?: string; // 渲染方法
+  displayAs?: string; // 显示名
+  editable?: boolean; // 是否可编辑
+
+  order?: number; // 顺序
+  icon?: string; // t-icon name 图标
 }
 
-interface displayRulesType {
-  [key: string]: displayRule;
-}
-
-interface UserTemplate {
-  display: CallableFunction; // 规则
-  attributes: Array<string>; // 包含的属性名
-}
-
-interface UserTemplates {
-  [key: string]: UserTemplate;
-}
-
-const defaultdisplayRules = {
-  id: {
-    key: "id",
-    display: true, // 在外面处理
+const defaultdisplayRules: Array<displayRule> = [
+  {
+    name: "文档ID",
+    rule: "id",
+    matchMethod: "精确",
+    display: true,
     displayAs: "块 ID",
     editable: false,
-    dataType: "块ID跳转",
-    order: 0, // 在外面处理
-    icon: <LinkIcon />,
-  },
-  scroll: {
-    key: "scroll",
-    display: false,
-    displayAs: "滚动进度",
-    editable: false,
-    dataType: "文本",
+    renderMethod: "link", // TODO: 需要支持识别思源id
     order: 0,
+    icon: "link",
   },
-  title: {
-    key: "title",
+  {
+    name: "阅读进度",
+    rule: "scroll",
+    matchMethod: "精确",
     display: false,
-    displayAs: "标题",
-    editable: false,
-    dataType: "文本",
-    order: 0,
   },
-  name: {
-    key: "name",
+  {
+    name: "标题",
+    rule: "title",
+    matchMethod: "精确",
+    display: false,
+  },
+  {
+    name: "命名",
+    rule: "name",
+    matchMethod: "精确",
     display: true,
     displayAs: "命名",
-    editable: true,
-    dataType: "文本",
-    order: 20,
-    icon: <ViewListIcon />,
+    editable: false,
+    renderMethod: "input",
   },
-  alias: {
-    key: "alias",
+  {
+    name: "别名",
+    rule: "alias",
+    matchMethod: "精确",
     display: true,
-    displayAs: "别名",
-    editable: true,
-    dataType: "标签输入框",
-    order: 30,
-    icon: <ViewAgendaIcon />,
-  },
-  type: {
-    key: "type",
-    display: false,
-    displayAs: "类型",
+    displayAs: "命名",
     editable: false,
-    dataType: "文本",
-    order: 0,
+    renderMethod: "tag-input",
   },
-  icon: {
-    key: "icon",
+  {
+    name: "类型",
+    rule: "type",
+    matchMethod: "精确",
     display: false,
-    displayAs: "图标",
-    editable: false,
-    dataType: "文本",
-    order: 0,
   },
-  updated: {
-    key: "updated",
+  {
+    name: "文档图标",
+    rule: "icon",
+    matchMethod: "精确",
+    display: false,
+  },
+  {
+    name: "更新日期",
+    rule: "updated",
+    matchMethod: "精确",
     display: true,
-    displayAs: "更新日期",
+    displayAs: "命名",
     editable: false,
-    dataType: "日期时间",
+    renderMethod: "datetime",
     order: 10,
-    icon: <CalendarEventIcon />,
+    icon: "calendar-event",
   },
-  "custom-source": {
-    key: "custom-source",
-    display: true,
-    displayAs: "源",
-    editable: true,
-    dataType: "文本",
-    order: 100,
-    icon: <ViewListIcon />,
-  },
-  fold: {
-    key: "fold",
-    display: true,
-    displayAs: "折叠状态",
-    editable: true,
-    dataType: "开关",
-    order: 40,
-    icon: <ComponentSwitchIcon />,
-  },
-  "custom-avs": {
-    key: "custom-avs",
+  {
+    name: "折叠状态",
+    rule: "fold",
+    matchMethod: "精确",
     display: false,
-    displayAs: "对应数据库",
-    editable: false,
-    dataType: undefined,
-    order: 30,
   },
-};
+  {
+    name: "关联数据库", // TODO: 显示为 tag-input readonly
+    rule: "custom-avs*",
+    matchMethod: "通配符",
+    display: false,
+  },
+];
 
-const defaultRenderMethods = {
-  块ID跳转: (value: string, _editable: boolean, _submit: any) => {
-    const url = `siyuan://blocks/${value}`;
-    return (
-      <Link theme="primary" hover="color" href={url}>
-        {value}
-      </Link>
-    );
-  },
-  文本: (value: string, editable: boolean, submit: any) => {
-    return (
-      <Input
-        defaultValue={value}
-        disabled={!editable}
-        borderless
-        autoWidth={value !== ""}
-        onEnter={submit}
-        placeholder=""
-      />
-    );
-  },
-  日期时间: (value: string, editable: boolean, submit: any) => {
-    // convert 20231102190552 to Date
-    if (value.length === 14) {
-      value = dayjs(value, "YYYYMMDDHHmmss").format("YYYY-MM-DD HH:mm:ss");
-    } else if (value === "") {
-      value = dayjs().format("YYYY-MM-DD HH:mm:ss");
+const pluginKey = "mux-siyuan-plugin-attributes-panel";
+
+export const useRuleStore = defineStore(pluginKey + "configurations", () => {
+  const plugin = inject("$plugin") as Plugin;
+
+  function useSiYuanStore<T>(key: string, defaultValue: T): Ref<UnwrapRef<T>> {
+    const data = ref(defaultValue);
+    const storageKey = `${pluginKey}-${key}`;
+
+    async function load() {
+      const config = await plugin.loadData(storageKey);
+      console.log("### load", storageKey, config);
+      if (!config) {
+        await plugin.saveData(storageKey, unref(defaultValue));
+        return defaultValue;
+      }
+      return config;
     }
 
-    return (
-      <DatePicker
-        defaultValue={value}
-        enable-time-picker
-        disabled={!editable}
-        clearable
-        borderless="true"
-      />
-    );
-  },
-  开关: (value: string, editable: boolean, submit: any) => {
-    function customSubmit(value: boolean) {
-      submit(value ? "1" : "0");
+    async function save() {
+      console.log("### save", storageKey, unref(data));
+      await plugin.saveData(storageKey, unref(data));
     }
 
-    return (
-      <Switch
-        defaultValue={value === "1"}
-        disabled={!editable}
-        onChange={customSubmit}
-      />
-    );
-  },
-  标签输入框: (value: string, editable: boolean, submit: any) => {
-    function customSubmit(value: Array<string>) {
-      submit(value.join(","));
-    }
+    // Sync with SiYuan Settings
+    setTimeout(async () => {
+      data.value = await load();
 
-    return (
-      <TagInput
-        defaultValue={value ? value.split(",") : []}
-        disabled={!editable}
-        borderless
-        autoWidth={value && value !== ""}
-        onBlur={customSubmit}
-        placeholder=""
-        excessTagsDisplayType="scroll"
-      />
-    );
-  },
-};
-
-const defaultTemplates = {
-  文档属性: {
-    display: (allAttributes) => {
-      return "title" in allAttributes;
-    },
-    attributes: ["name", "alias"], // 命名，别名
-  },
-};
-
-// 持久化保存
-export const useRuleStore = defineStore("rules", {
-  state: () => ({
-    // 控制数据可见性，可编辑性, key: displayRule
-    displayRules: { ...defaultdisplayRules } as displayRulesType,
-    // 用户自定义模板，用于快速填充
-    userTemplates: { ...defaultTemplates } as UserTemplates,
-    // 渲染方法
-    renderMethods: { ...defaultRenderMethods } as any,
-  }),
-  getters: {
-    createOptions(): Array<displayRule> {
-      return Object.values(this.displayRules).flatMap((rule: displayRule) => {
-        if (!rule.display || !rule.editable) return [];
-
-        return rule;
+      // Save when change
+      watch(data, async () => {
+        await save();
       });
+    });
+
+    return data;
+  }
+
+  // --- Setting Persist Storage ---
+  const configurations = useSiYuanStore("configurations", {
+    show: true,
+    showSettings: {
+      page: true,
+      block: false,
     },
-  },
-  actions: {},
+  });
+
+  // 控制数据可见性，可编辑性
+  const rules = useSiYuanStore("rules", defaultdisplayRules);
+
+  return {
+    configurations,
+    rules,
+  };
 });
