@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { Plugin } from "siyuan";
 import { Ref, UnwrapRef, inject, ref, unref, watch } from "vue";
 
-interface displayRule {
+export interface displayRule {
   name: string; // 规则名
 
   rule: string; // 匹配属性名 | 匹配规则 | 正则
