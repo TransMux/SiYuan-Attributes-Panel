@@ -7,8 +7,12 @@ import { Ref, UnwrapRef, inject, ref, unref, watch } from "vue";
 const pluginKey = "mux-siyuan-plugin-attributes-panel";
 
 export const useAttributesStore = defineStore(pluginKey, () => {
-  // Defining a Store using Setup | Pinia
-  // https://pinia.vuejs.org/core-concepts/#Setup-Stores
+  // Data Flow Model
+
+  // SiYuan --> Inner Store --> UI
+  // UI --> API --> SiYuan --> Flush(Based on message --> function) --> UI
+  // UI --> Inner Store (UnReliable, based on components)
+
   const plugin = inject("$plugin") as Plugin;
 
   function useSiYuanStore<T>(key: string, defaultValue: T): Ref<UnwrapRef<T>> {
