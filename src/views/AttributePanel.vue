@@ -1,11 +1,13 @@
 <template>
     <div class="attribute-panel">
-        <template v-if="Object.keys(attributeStore.avs).length === 0">
+        <template v-if="Object.keys(attributeStore.dataBaseAttributes).length === 0">
+            <!-- 只有内置的话就只显示内置的 -->
             <BuiltInAttrs />
         </template>
 
         <template v-else>
-            <t-tabs :default-value="Object.keys(attributeStore.avs)[0]">
+            <t-tabs :default-value="Object.keys(attributeStore.dataBaseAttributes)[0]">
+                <!-- 否则默认显示第一个数据库 -->
                 <t-tab-panel value="builtin">
                     <template #label> <t-icon name="table-1" class="tabs-icon-margin" /> 内置属性 </template>
                     <KeepAlive>
@@ -13,7 +15,7 @@
                     </KeepAlive>
                 </t-tab-panel>
 
-                <template v-for="(av, avID) in attributeStore.avs" :key="avID">
+                <template v-for="(av, avID) in attributeStore.dataBaseAttributes" :key="avID">
                     <t-tab-panel :value="avID">
                         <template #label> <t-icon name="data-base" class="tabs-icon-margin" /> {{ av.avName || avID }}
                         </template>
@@ -30,10 +32,8 @@
 
 <script setup lang="ts">
 import { useAttributesStore } from '@/store/attribute';
-import { useRuleStore } from '@/store/rules';
-import { ref, watch } from 'vue';
-// 通过一个块id，渲染对应的属性面板
 
+// 通过文档id，渲染对应的属性面板
 const attributeStore = useAttributesStore();
 </script>
 

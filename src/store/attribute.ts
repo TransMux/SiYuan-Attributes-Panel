@@ -9,6 +9,8 @@ interface innerAttribute extends displayRule {
   value: string;
 }
 
+// TODO: Database Data Type
+
 export const useAttributesStore = defineStore(pluginKey + "attrs", () => {
   // Data Flow Model
 
@@ -19,7 +21,7 @@ export const useAttributesStore = defineStore(pluginKey + "attrs", () => {
   // --- Attributes Data Storages ---
   const documentId = ""
   const builtInAttributes = ref([] as Array<innerAttribute>) // 内置数据库属性
-  const dataBaseAttributes = ref([]) // 当前文档所有数据库属性
+  const dataBaseAttributes = reactive({}) // 当前文档所有数据库属性
   const pageBlockAttributes = reactive({}) // 当前块属性
 
   function fetchInnerAttributes() {
@@ -109,10 +111,10 @@ export const useAttributesStore = defineStore(pluginKey + "attrs", () => {
             }
           );
 
-          this.avs[av.avID] = database;
+          this.dataBaseAttributes[av.avID] = database;
         }
 
-        console.log("Converted Attribute Views", this.avs);
+        console.log("Converted Attribute Views", this.dataBaseAttributes);
       }
     );
   }
