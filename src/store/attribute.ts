@@ -67,7 +67,7 @@ export const useAttributesStore = defineStore(pluginKey + "attrs", () => {
 
           database.fields = av.keyValues.flatMap(
             ({ key, values }) => {
-              // TODO: Convert Attributes by rules and orders
+              // TODO: Convert Attributes by rules and orders via dragging
               // 跳过主键
               if (key.type === "block") {
                 return [];
