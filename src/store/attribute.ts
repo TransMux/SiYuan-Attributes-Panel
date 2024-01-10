@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import { fetchPost } from "siyuan";
-import { reactive, ref } from "vue";
+import { inject, reactive, ref } from "vue";
 import { displayRule, useConfigStore } from "./rules";
 
 const pluginKey = "mux-siyuan-plugin-attributes-panel";
 
 export interface innerAttribute extends displayRule {
+  key: string;
   value: string;
 }
 
@@ -19,7 +20,7 @@ export const useAttributesStore = defineStore(pluginKey + "attrs", () => {
   // UI --> Inner Store (UnReliable, based on components)
 
   // --- Attributes Data Storages ---
-  const documentId = ""
+  const documentId = inject("$docId")
   const builtInAttributes = ref([] as Array<innerAttribute>) // 内置数据库属性
   const dataBaseAttributes = reactive({}) // 当前文档所有数据库属性
   const pageBlockAttributes = reactive({}) // 当前块属性
@@ -38,7 +39,7 @@ export const useAttributesStore = defineStore(pluginKey + "attrs", () => {
           const rule = matchRules(attributeName);
 
           if (rule && rule.display === true) {
-            builtInAttributes.value.push({ ...rule, value: attributeValue });
+            builtInAttributes.value.push({ ...rule, key: attributeName, value: attributeValue });
           }
         }
         // order
