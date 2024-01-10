@@ -91,8 +91,8 @@ const props = defineProps({
 
 const attributeStore = useAttributesStore();
 
-const { avs } = storeToRefs(attributeStore)
-const targetTable = avs.value[props.avID]
+const { dataBaseAttributes } = storeToRefs(attributeStore)
+const targetTable = dataBaseAttributes.value[props.avID]
 const targetField = targetTable.fields[props.fieldIndex]
 const { cellID, keyID, rowID, name, value, type, options } = targetField
 
