@@ -1,80 +1,32 @@
 <template>
     <t-layout style="height: 100%;">
-        <t-aside>
+        <t-aside v-if="true">
             <t-menu theme="light" value="dashboard" style="margin-right: 50px" height="550px">
-                <template #logo>
-                    <img width="136" class="logo" src="https://www.tencent.com/img/index/menu_logo_hover.png" alt="logo" />
-                </template>
                 <t-menu-item value="dashboard">
                     <template #icon>
                         <t-icon name="dashboard" />
                     </template>
-                    仪表盘
-                </t-menu-item>
-                <t-menu-item value="resource">
-                    <template #icon>
-                        <t-icon name="server" />
-                    </template>
-                    资源列表
-                </t-menu-item>
-                <t-menu-item value="root">
-                    <template #icon>
-                        <t-icon name="root-list" />
-                    </template>
-                    根目录
-                </t-menu-item>
-                <t-menu-item value="control-platform">
-                    <template #icon>
-                        <t-icon name="control-platform" />
-                    </template>
-                    调度平台
-                </t-menu-item>
-                <t-menu-item value="precise-monitor">
-                    <template #icon>
-                        <t-icon name="precise-monitor" />
-                    </template>
-                    调度平台
-                </t-menu-item>
-                <t-menu-item value="mail">
-                    <template #icon>
-                        <t-icon name="mail" />
-                    </template>
-                    消息区
-                </t-menu-item>
-                <t-menu-item value="user-circle">
-                    <template #icon>
-                        <t-icon name="user-circle" />
-                    </template>
-                    个人中心
-                </t-menu-item>
-                <t-menu-item value="play-circle">
-                    <template #icon>
-                        <t-icon name="play-circle" />
-                    </template>
-                    视频区
-                </t-menu-item>
-                <t-menu-item value="edit1">
-                    <template #icon>
-                        <t-icon name="edit-1" />
-                    </template>
-                    资源编辑
+                    Command Palette
                 </t-menu-item>
             </t-menu>
         </t-aside>
         <t-layout>
             <t-content>
-                <div>Content</div>
+                <div class="layout">
+                    <SettingContent />
+                </div>
             </t-content>
-            <t-footer>Copyright @ 2019-{{ new Date().getFullYear() }} Tencent. All Rights Reserved</t-footer>
+            <t-footer>Copyright @ 2022-{{ new Date().getFullYear() }} TransMux. All Rights Reserved</t-footer>
         </t-layout>
     </t-layout>
 </template>
 
 <script setup lang="ts">
-import { useAttributesStore } from '@/store/attribute';
-
-const attributeStore = useAttributesStore();
-
+import SettingContent from './SettingContent.vue';
 </script>
 
-<style scoped></style>
+<style scoped>
+.layout {
+    padding: var(--td-comp-paddingTB-xl) var(--td-comp-paddingLR-xl);
+}
+</style>
