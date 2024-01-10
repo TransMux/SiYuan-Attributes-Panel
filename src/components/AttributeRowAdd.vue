@@ -8,12 +8,12 @@
         <template v-else>
             <t-select v-model="attributeKey" :borderless="true" class="attr-selector" placeholder="-请选择-" :showArrow="false"
                 filterable @change="handleSelect" creatable @create="handleCreate">
-                <t-option v-for="item in options" :key="item.key" :value="item.key" :label="item.displayAs">
+                <!-- <t-option v-for="item in options" :key="item.key" :value="item.key" :label="item.displayAs">
                     <div class="create-option">
                         <component :is="item.icon"></component>
                         <div>{{ item.displayAs }}</div>
                     </div>
-                </t-option>
+                </t-option> -->
 
                 <template #empty>
                     <div class="t-select__empty">没有更多预设啦<br> 输入以创建新值！</div>
@@ -32,18 +32,18 @@
 <script setup lang="tsx">
 import { computed, ref, shallowRef } from 'vue';
 import { useAttributesStore } from '@/store/attribute';
-import { useRuleStore } from '@/store/rules';
+import { useConfigStore } from '@/store/rules';
 import { AddIcon, ChevronDownIcon, ViewListIcon } from 'tdesign-icons-vue-next';
 import { MessagePlugin } from 'tdesign-vue-next';
 
 const attributeStore = useAttributesStore();
-const ruleStore = useRuleStore();
+const configStore = useConfigStore();
 
-const avaliable = ruleStore.createOptions
-const existingRows = computed(() => Object.keys(attributeStore.attributes))
-const options = computed(() => {
-    return avaliable.filter(item => !existingRows.value.includes(item.key))
-})
+// const avaliable = configStore.createOptions
+// const existingRows = computed(() => attributeStore.builtInAttributes.map(item => item.key)
+// const options = computed(() => {
+//     return avaliable.filter(item => !existingRows.value.includes(item.key))
+// })
 
 const attributeKey = ref("");
 const attributeValue = ref('');
@@ -71,9 +71,9 @@ function submit(text, callback?: any) {
 }
 
 function handleSelect() {
-    const displayRule = ruleStore.displayRules[attributeKey.value];
+    const displayRule = configStore.displayRules[attributeKey.value];
     if (displayRule) {
-        const displayMethod = ruleStore.renderMethods[displayRule.dataType];
+        const displayMethod = configStore.renderMethods[displayRule.dataType];
         dynamicIcon.value = displayRule.icon;
         if (displayMethod) {
             dynamicComponent.value = displayMethod("", true, submit);
