@@ -1,55 +1,29 @@
 <template>
-    <BaseRow :name="name" :key="cellID" :icon="siyuanDatabaseIcons[type]">
+    <BaseRow :name="displayAs" :key="index" :siyuan-key="key">
 
-        <!-- 单选 -->
-        <template v-if="attributeValue.renderMethod === 'select'">
-            <t-select v-model="selectValue" :borderless="true" placeholder="-请选择-">
-                <t-option v-for="(item, index) in options" :key="index" :value="index" :label="item.name"></t-option>
-            </t-select>
-        </template>
-
-        <!-- 文本 -->
-        <template v-else-if="attributeValue.renderMethod === 'text'">
-            <t-input v-model="value.content" :borderless="true" placeholder="请输入" @blur="handleSubmit" />
+        <!-- 单行输入框 -->
+        <template v-if="renderMethod === 'input'">
+            <t-input v-model="value" :borderless="true" placeholder="请输入" />
         </template>
 
         <!-- 链接 -->
-        <template v-else-if="attributeValue.renderMethod === 'url'">
-            <t-input v-model="value.content" :borderless="true" placeholder="请输入" @blur="handleSubmit" />
+        <template v-else-if="renderMethod === 'link'">
+            <t-input v-model="value" :borderless="true" placeholder="请输入" />
         </template>
 
-        <!-- 数字 -->
-        <template v-else-if="attributeValue.renderMethod === 'number'">
-            <t-input-number v-model="value.content" :borderless="true" placeholder="请输入" @change="handleChange" />
+        <!-- Tag 输入框 -->
+        <template v-else-if="renderMethod === 'tag-input'">
+            <t-input-number v-model="value" :borderless="true" placeholder="请输入" />
         </template>
 
-        <!-- 多选 -->
-        <template v-else-if="attributeValue.renderMethod === 'mSelect'">
-            <t-select v-model="selectValue" :borderless="true" placeholder="-请选择-" multiple>
-                <t-option v-for="(item, index) in options" :key="index" :value="index" :label="item.name"></t-option>
-            </t-select>
+        <!-- 日期时间 -->
+        <template v-else-if="renderMethod === 'datetime'">
+            <t-date-picker v-model="value" :borderless="true" placeholder="请选择" enableTimePicker allow-input />
         </template>
 
-        <!-- 日期 -->
-        <template v-else-if="attributeValue.renderMethod === 'date'">
-            <template v-if="!value.hasEndDate">
-                <t-date-picker v-model="value.content" :borderless="true" placeholder="请选择"
-                    :enableTimePicker="!value.isNotTime" allow-input @change="handleDateChange" />
-            </template>
-            <template v-else>
-                <t-date-range-picker v-model="dateRange" :borderless="true" placeholder="请选择"
-                    :enableTimePicker="!value.isNotTime" allow-input @change="handleDateChange" />
-            </template>
-        </template>
-
-        <!-- 复选框 -->
-        <template v-else-if="attributeValue.renderMethod === 'checkbox'">
-            <t-checkbox v-model="value.checked" :borderless="true" @change="handleSubmit" />
-        </template>
-
-        <!-- 模板 -->
-        <template v-else-if="attributeValue.renderMethod === 'template'">
-            <t-input v-model="value.content" :borderless="true" placeholder="请输入" readonly />
+        <!-- 复选框 Unused -->
+        <template v-else-if="renderMethod === 'checkbox'">
+            <t-checkbox v-model="value" :borderless="true" />
         </template>
 
         <template v-else>
@@ -59,7 +33,7 @@
 </template>
   
 <script setup lang="tsx">
-import { innerAttribute, useAttributesStore } from '@/store/attribute';
+import { useAttributesStore } from '@/store/attribute';
 import { storeToRefs } from 'pinia';
 import { toRefs } from 'vue';
 
@@ -75,17 +49,7 @@ const props = defineProps({
 // TODO: 这样到底会不会丢失响应性
 const { builtInAttributes } = storeToRefs(attributeStore);
 const attributeValue = builtInAttributes.value[props.index]
-const { name, type, options, displayKey } = toRefs(attributeValue)
-
-// function submit(text, callback?: any) {
-//     submitting.value = true;
-//     attributeStore.setAttribute(props.name, text, () => {
-//         // TODO: 这里没做错误处理，万一没成功呢？
-//         if (callback && typeof callback === "function") callback()
-//         MessagePlugin.success(`设置 ${displayKey} 成功`)
-//         submitting.value = false;
-//     })
-// }
+const { key, value, renderMethod, displayAs } = toRefs(attributeValue)
 </script>
 
 <style scoped>
