@@ -104,21 +104,20 @@ export const useConfigStore = defineStore(pluginKey + "configurations", () => {
 
   function useSiYuanStore<T>(key: string, defaultValue: T): Ref<UnwrapRef<T>> {
     const data = ref(defaultValue);
-    const storageKey = `${pluginKey}-${key}`;
 
     async function load() {
-      const config = await plugin.loadData(storageKey);
-      console.log("### load", storageKey, config);
+      const config = await plugin.loadData(key);
+      console.log("### load", key, config);
       if (!config) {
-        await plugin.saveData(storageKey, unref(defaultValue));
+        await plugin.saveData(key, unref(defaultValue));
         return defaultValue;
       }
       return config;
     }
 
     async function save() {
-      console.log("### save", storageKey, unref(data));
-      await plugin.saveData(storageKey, unref(data));
+      console.log("### save", key, unref(data));
+      await plugin.saveData(key, unref(data));
     }
 
     // Sync with SiYuan Settings
