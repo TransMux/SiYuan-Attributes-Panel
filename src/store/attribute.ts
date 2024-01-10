@@ -112,10 +112,10 @@ export const useAttributesStore = defineStore(pluginKey + "attrs", () => {
             }
           );
 
-          this.dataBaseAttributes[av.avID] = database;
+          dataBaseAttributes[av.avID] = database;
         }
 
-        console.log("Converted Attribute Views", this.dataBaseAttributes);
+        console.log("Converted Attribute Views", dataBaseAttributes);
       }
     );
   }
