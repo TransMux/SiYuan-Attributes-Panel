@@ -29,7 +29,7 @@ const props = defineProps({
 // 通过数据库id，渲染对应的属性面板
 const attributeStore = useAttributesStore();
 
-const targetTable = attributeStore.avs[props.avID]
+const targetTable = attributeStore.dataBaseAttributes[props.avID]
 </script>
 
 
