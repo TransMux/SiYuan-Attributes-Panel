@@ -1,6 +1,6 @@
 <template>
     <t-card :bordered="false">
-        <template v-for="(_, index) in attributeStore.builtInAttributes" :key="attribute.name">
+        <template v-for="(attribute, index) in attributeStore.builtInAttributes" :key="attribute.name">
             <AttributeRow :index="index" />
         </template>
         <AttributeRowAdd />
