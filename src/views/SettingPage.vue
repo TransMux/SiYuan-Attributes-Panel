@@ -6,7 +6,8 @@
                     <template #icon>
                         <t-icon name="dashboard" />
                     </template>
-                    Command Palette
+                    属性面板
+                    <t-tag theme="success" variant="outline">latest v1.1.0</t-tag>
                 </t-menu-item>
             </t-menu>
         </t-aside>
