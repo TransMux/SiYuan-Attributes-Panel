@@ -48,7 +48,7 @@ const defaultdisplayRules: Array<displayRule> = [
     matchMethod: "精确",
     display: true,
     displayAs: "命名",
-    editable: false,
+    editable: true,
     renderMethod: "input",
   },
   {
@@ -57,7 +57,7 @@ const defaultdisplayRules: Array<displayRule> = [
     matchMethod: "精确",
     display: true,
     displayAs: "别名",
-    editable: false,
+    editable: true,
     renderMethod: "tag-input",
   },
   {
