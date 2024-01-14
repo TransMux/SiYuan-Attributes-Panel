@@ -90,6 +90,12 @@ const defaultdisplayRules: Array<displayRule> = [
     display: false,
   },
   {
+    name: "关联数据库",
+    rule: "custom-avs",
+    matchMethod: "精确",
+    display: false,
+  },
+  {
     name: "关联数据库", // TODO: 显示为 tag-input readonly
     rule: "custom-avs*",
     matchMethod: "通配符",

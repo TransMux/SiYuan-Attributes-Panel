@@ -63,7 +63,7 @@ export default class PluginSample extends Plugin {
       "loaded-protyle-static",
       this.createInitEventHandler(this)
     );
-    document.querySelector("#mux-attribute-panel")?.remove();
+    document.querySelector(".mux-attribute-panel")?.remove();
   }
 
 //   openSetting() {

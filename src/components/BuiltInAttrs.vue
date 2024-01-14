@@ -3,7 +3,7 @@
         <template v-for="(attribute, index) in attributeStore.builtInAttributes" :key="attribute.name">
             <AttributeRow :index="index" />
         </template>
-        <AttributeRowAdd />
+        <!-- <AttributeRowAdd /> -->
     </t-card>
 </template>
 

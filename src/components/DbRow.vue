@@ -65,6 +65,7 @@ import BaseRow from './BaseRow.vue';
 import { computed } from 'vue';
 import { fetchPost } from 'siyuan';
 import { storeToRefs } from 'pinia';
+import { MessagePlugin } from 'tdesign-vue-next';
 
 
 const siyuanDatabaseIcons = {
@@ -147,6 +148,9 @@ const selectValue = computed({
                     }
                 },
             },
+            () => {
+                MessagePlugin.success("设置成功")
+            }
         );
     }
 })
@@ -167,6 +171,9 @@ function handleSubmit(x) {
                     }
                 },
             },
+            () => {
+                MessagePlugin.success("设置成功")
+            }
         );
     } else {
         fetchPost(
@@ -182,6 +189,9 @@ function handleSubmit(x) {
                     }
                 },
             },
+            () => {
+                MessagePlugin.success("设置成功")
+            }
         );
     }
 }
@@ -206,6 +216,9 @@ function handleChange(x, context) {
                 }
             },
         },
+        () => {
+            MessagePlugin.success("设置成功")
+        }
     );
 }
 
@@ -230,6 +243,9 @@ function handleDateChange(_, { dayjsValue }) {
             "rowID": rowID,
             "value": value
         },
+        () => {
+            MessagePlugin.success("设置成功")
+        }
     );
 }
 
