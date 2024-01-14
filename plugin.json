@@ -5,7 +5,7 @@
   "version": "1.1.0",
   "minAppVersion": "2.10.13",
   "backends": ["windows", "linux", "darwin"],
-  "frontends": ["desktop", "desktop-window"],
+  "frontends": ["desktop", "desktop-window", "browser-desktop"],
   "displayName": {
     "default": "SiYuan-Attribute-Panel",
     "zh_CN": "文档属性面板"
@@ -22,6 +22,5 @@
     "openCollective": "",
     "patreon": "",
     "github": ""
-  },
-  "keywords": ["sample", "示例"]
+  }
 }
