@@ -147,9 +147,6 @@ const selectValue = computed({
                         "content": optionsValue
                     }
                 },
-            },
-            () => {
-                MessagePlugin.success("设置成功")
             }
         );
     }
