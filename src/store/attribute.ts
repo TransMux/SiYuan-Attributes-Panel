@@ -89,12 +89,16 @@ export const useAttributesStore = defineStore(pluginKey + "attrs", () => {
               if (value.type === "select" || value.type === "mSelect") {
                 // change every cellValue {content: "aaa", color: "1"} -> index
                 // 暂时屏蔽name和content的区别，暂时屏蔽对象，注意如果以后content不唯一，这里绝对会出问题
-                cellValue = {
-                  "content": cellValue.map((v) => {
-                    return key.options.findIndex(
-                      (option) => option.name === v.content
-                    );
-                  })
+                if(cellValue instanceof Array) {
+                  cellValue = {
+                    "content": cellValue.map((v) => {
+                      return key.options.findIndex(
+                        (option) => option.name === v.content
+                      );
+                    })
+                  }
+                } else {
+                  cellValue = []
                 }
               }
 
