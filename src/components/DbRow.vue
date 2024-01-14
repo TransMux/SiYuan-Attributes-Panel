@@ -4,7 +4,7 @@
 
         <!-- 单选 -->
         <template v-if="type === 'select'">
-            <t-select v-model="selectValue" :borderless="true" placeholder="-请选择-">
+            <t-select v-model="selectValue" :borderless="true" placeholder="-请选择-" readonly>
                 <t-option v-for="(item, index) in options" :key="index" :value="index" :label="item.name"></t-option>
             </t-select>
         </template>
@@ -26,7 +26,7 @@
 
         <!-- 多选 -->
         <template v-else-if="type === 'mSelect'">
-            <t-select v-model="selectValue" :borderless="true" placeholder="-请选择-" multiple>
+            <t-select readonly v-model="selectValue" :borderless="true" placeholder="-请选择-" multiple>
                 <t-option v-for="(item, index) in options" :key="index" :value="index" :label="item.name"></t-option>
             </t-select>
         </template>
@@ -34,11 +34,11 @@
         <!-- 日期 -->
         <template v-else-if="type === 'date'">
             <template v-if="!value.hasEndDate">
-                <t-date-picker v-model="value.content" :borderless="true" placeholder="请选择"
+                <t-date-picker readonly v-model="value.content" :borderless="true" placeholder="请选择"
                     :enableTimePicker="!value.isNotTime" allow-input @change="handleDateChange" />
             </template>
             <template v-else>
-                <t-date-range-picker v-model="dateRange" :borderless="true" placeholder="请选择"
+                <t-date-range-picker readonly v-model="dateRange" :borderless="true" placeholder="请选择"
                     :enableTimePicker="!value.isNotTime" allow-input @change="handleDateChange" />
             </template>
         </template>
