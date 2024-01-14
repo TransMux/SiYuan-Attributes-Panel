@@ -1,5 +1,7 @@
 ## 属性面板<sup>SiYuan-Attributes-Panel</sup>
 
+注意：目前**数据库**中的单选，多选，日期选择修改存在一些奇怪的问题（比如会造成属性类型的混乱），还需要进一步研究，目前最好不要修改这些类型的数据。所以这几个类型目前是只读状态，很快修复！
+
 ### 即将推出的功能...
 
 - [支持显示数据库属性](https://github.com/InEase/SiYuan-Attributes-Panel/issues/4)
