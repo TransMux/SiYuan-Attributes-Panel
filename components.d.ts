@@ -15,7 +15,6 @@ declare module 'vue' {
     DbRow: typeof import('./src/components/DbRow.vue')['default']
     DebugInfo: typeof import('./src/components/DebugInfo.vue')['default']
     TAside: typeof import('tdesign-vue-next')['Aside']
-    TButton: typeof import('tdesign-vue-next')['Button']
     TCard: typeof import('tdesign-vue-next')['Card']
     TCheckbox: typeof import('tdesign-vue-next')['Checkbox']
     TContent: typeof import('tdesign-vue-next')['Content']
