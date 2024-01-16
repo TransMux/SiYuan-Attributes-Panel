@@ -4,7 +4,7 @@
   "url": "https://github.com/InEase/SiYuan-Attribute-Panel",
   "version": "1.1.1",
   "minAppVersion": "2.10.13",
-  "backends": ["windows", "linux", "darwin"],
+  "backends": ["windows", "linux", "darwin", "android", "docker", "ios"],
   "frontends": ["desktop", "desktop-window", "browser-desktop"],
   "displayName": {
     "default": "SiYuan-Attribute-Panel",
